@@ -3,6 +3,8 @@
 class MetricPoint < ApplicationRecord
   include Timescaledb::Rails::Model
 
+  self.primary_key = "id"
+
   belongs_to :project
 
   validates :metric_name, presence: true

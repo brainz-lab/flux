@@ -3,6 +3,8 @@
 class AggregatedMetric < ApplicationRecord
   include Timescaledb::Rails::Model
 
+  self.primary_key = "id"
+
   BUCKET_SIZES = %w[1m 5m 1h 1d].freeze
 
   belongs_to :project

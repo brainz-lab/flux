@@ -3,6 +3,8 @@
 class Event < ApplicationRecord
   include Timescaledb::Rails::Model
 
+  self.primary_key = "id"
+
   belongs_to :project, counter_cache: :events_count
 
   validates :name, presence: true
