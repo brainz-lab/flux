@@ -1,0 +1,75 @@
+<% content_for(:title) { "Dev Tools" } %>
+
+<div class="space-y-8">
+  <div>
+    <h1 class="text-[22px] font-semibold tracking-tight" style="color: #1A1A1A;">Dev Tools</h1>
+    <p class="mt-1 text-[13px]" style="color: #8B8780;">Development utilities and project information</p>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="px-5 py-4 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <p class="text-[12px] uppercase tracking-wide" style="color: #8B8780;">Events</p>
+      <p class="mt-1 text-[24px] font-semibold" style="color: #1A1A1A;"><%= number_with_delimiter(@stats[:events_count]) %></p>
+    </div>
+    <div class="px-5 py-4 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <p class="text-[12px] uppercase tracking-wide" style="color: #8B8780;">Metrics</p>
+      <p class="mt-1 text-[24px] font-semibold" style="color: #1A1A1A;"><%= number_with_delimiter(@stats[:metrics_count]) %></p>
+    </div>
+    <div class="px-5 py-4 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <p class="text-[12px] uppercase tracking-wide" style="color: #8B8780;">Dashboards</p>
+      <p class="mt-1 text-[24px] font-semibold" style="color: #1A1A1A;"><%= number_with_delimiter(@stats[:dashboards_count]) %></p>
+    </div>
+    <div class="px-5 py-4 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <p class="text-[12px] uppercase tracking-wide" style="color: #8B8780;">Anomalies</p>
+      <p class="mt-1 text-[24px] font-semibold" style="color: #1A1A1A;"><%= number_with_delimiter(@stats[:anomalies_count]) %></p>
+    </div>
+  </div>
+
+  <div class="space-y-6">
+    <div class="px-6 py-5 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <h2 class="text-[15px] font-medium mb-4" style="color: #1A1A1A;">Project Details</h2>
+      <dl class="space-y-3">
+        <div class="flex justify-between">
+          <dt class="text-[13px]" style="color: #8B8780;">Project ID</dt>
+          <dd class="text-[13px] font-mono" style="color: #1A1A1A;"><%= @project.id %></dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-[13px]" style="color: #8B8780;">Platform Project ID</dt>
+          <dd class="text-[13px] font-mono" style="color: #1A1A1A;"><%= @project.platform_project_id %></dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-[13px]" style="color: #8B8780;">Environment</dt>
+          <dd class="text-[13px]" style="color: #1A1A1A;"><%= @project.environment %></dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-[13px]" style="color: #8B8780;">API Key</dt>
+          <dd class="text-[13px] font-mono" style="color: #1A1A1A;"><%= @project.api_key %></dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-[13px]" style="color: #8B8780;">Ingest Key</dt>
+          <dd class="text-[13px] font-mono" style="color: #1A1A1A;"><%= @project.ingest_key %></dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-[13px]" style="color: #8B8780;">Retention Days</dt>
+          <dd class="text-[13px]" style="color: #1A1A1A;"><%= @project.retention_days %></dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-[13px]" style="color: #8B8780;">Created</dt>
+          <dd class="text-[13px]" style="color: #1A1A1A;"><%= @project.created_at.strftime("%b %d, %Y %H:%M") %></dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="px-6 py-5 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <h2 class="text-[15px] font-medium mb-4" style="color: #1A1A1A;">Quick Test</h2>
+      <p class="text-[13px] mb-3" style="color: #6B6760;">Test event ingestion with curl:</p>
+      <pre class="p-4 rounded-lg text-[13px] overflow-x-auto" style="background: #1A1A1A; color: #E8E5E0;"><code>curl -X POST <%= request.base_url %>/api/v1/events \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <%= @project.ingest_key %>" \
+  -d '{
+    "name": "test.event",
+    "properties": { "source": "dev_tools" }
+  }'</code></pre>
+    </div>
+  </div>
+</div>

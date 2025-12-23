@@ -1,0 +1,122 @@
+<% content_for(:title) { "Overview" } %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-[22px] font-semibold tracking-tight" style="color: #1A1A1A;">Overview</h1>
+      <p class="mt-1 text-[13px]" style="color: #8B8780;">Last 24 hours</p>
+    </div>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="px-5 py-4 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <p class="text-[12px] font-medium uppercase tracking-wide" style="color: #8B8780;">Events</p>
+      <p class="mt-1 text-[28px] font-semibold tabular-nums" style="color: #1A1A1A;">
+        <%= number_with_delimiter(@stats[:events_total]) %>
+      </p>
+    </div>
+    <div class="px-5 py-4 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <p class="text-[12px] font-medium uppercase tracking-wide" style="color: #8B8780;">Metrics</p>
+      <p class="mt-1 text-[28px] font-semibold tabular-nums" style="color: #1A1A1A;">
+        <%= number_with_delimiter(@stats[:metrics_total]) %>
+      </p>
+    </div>
+    <div class="px-5 py-4 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <p class="text-[12px] font-medium uppercase tracking-wide" style="color: #8B8780;">Anomalies</p>
+      <p class="mt-1 text-[28px] font-semibold tabular-nums" style="color: #F97316;">
+        <%= number_with_delimiter(@stats[:anomalies_count]) %>
+      </p>
+    </div>
+    <div class="px-5 py-4 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <p class="text-[12px] font-medium uppercase tracking-wide" style="color: #8B8780;">Dashboards</p>
+      <p class="mt-1 text-[28px] font-semibold tabular-nums" style="color: #1A1A1A;">
+        <%= number_with_delimiter(@stats[:dashboards_count]) %>
+      </p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Top Events -->
+    <div class="rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <div class="px-5 py-4 border-b" style="border-color: #E8E5E0;">
+        <h2 class="text-[15px] font-medium" style="color: #1A1A1A;">Top Events</h2>
+        <p class="mt-0.5 text-[12px]" style="color: #8B8780;">Most tracked events</p>
+      </div>
+      <div class="divide-y" style="border-color: #E8E5E0;">
+        <% @recent_events.each do |name, count| %>
+          <div class="px-5 py-3 flex items-center justify-between">
+            <span class="text-[14px] font-medium" style="color: #F97316;"><%= name %></span>
+            <span class="text-[13px] tabular-nums" style="color: #6B6760;"><%= number_with_delimiter(count) %></span>
+          </div>
+        <% end %>
+        <% if @recent_events.empty? %>
+          <div class="px-5 py-8 text-center">
+            <p class="text-[14px]" style="color: #8B8780;">No events tracked yet</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Recent Anomalies -->
+    <div class="rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <div class="px-5 py-4 border-b" style="border-color: #E8E5E0;">
+        <h2 class="text-[15px] font-medium" style="color: #1A1A1A;">Recent Anomalies</h2>
+        <p class="mt-0.5 text-[12px]" style="color: #8B8780;">Latest detected anomalies</p>
+      </div>
+      <div class="divide-y" style="border-color: #E8E5E0;">
+        <% @recent_anomalies.each do |anomaly| %>
+          <div class="px-5 py-3">
+            <div class="flex items-center justify-between">
+              <div class="min-w-0 flex-1">
+                <p class="text-[14px] font-medium truncate" style="color: #1A1A1A;"><%= anomaly.source_name %></p>
+                <p class="text-[12px]" style="color: #8B8780;">
+                  <%= anomaly.anomaly_type.capitalize %> · <%= anomaly.deviation_description %>
+                </p>
+              </div>
+              <span class="ml-3 px-2 py-0.5 text-[11px] font-medium rounded-full
+                <%= case anomaly.severity
+                    when 'critical' then 'bg-red-100 text-red-700'
+                    when 'warning' then 'bg-amber-100 text-amber-700'
+                    else 'bg-blue-100 text-blue-700'
+                    end %>">
+                <%= anomaly.severity %>
+              </span>
+            </div>
+          </div>
+        <% end %>
+        <% if @recent_anomalies.empty? %>
+          <div class="px-5 py-8 text-center">
+            <p class="text-[14px]" style="color: #8B8780;">No anomalies detected</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Start -->
+  <div class="rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+    <div class="px-5 py-4 border-b" style="border-color: #E8E5E0;">
+      <h2 class="text-[15px] font-medium" style="color: #1A1A1A;">Quick Start</h2>
+    </div>
+    <div class="px-5 py-4">
+      <p class="text-[14px]" style="color: #6B6760;">Track events and metrics using the SDK:</p>
+      <pre class="mt-3 p-4 rounded-lg text-[13px] leading-relaxed overflow-x-auto" style="background: #1A1A1A; color: #E8E5E0;"><code><span style="color: #8B8780;"># Track an event</span>
+BrainzLab::Flux.track(<span style="color: #F97316;">"user.signup"</span>, {
+  user_id: user.id,
+  plan: <span style="color: #F97316;">"pro"</span>
+})
+
+<span style="color: #8B8780;"># Track metrics</span>
+BrainzLab::Flux.gauge(<span style="color: #F97316;">"users.online"</span>, 234)
+BrainzLab::Flux.increment(<span style="color: #F97316;">"api.requests"</span>)
+BrainzLab::Flux.distribution(<span style="color: #F97316;">"response_time"</span>, 145.2)
+
+<span style="color: #8B8780;"># Time a block</span>
+BrainzLab::Flux.measure(<span style="color: #F97316;">"pdf.generate"</span>) do
+  generate_pdf(document)
+end</code></pre>
+    </div>
+  </div>
+</div>

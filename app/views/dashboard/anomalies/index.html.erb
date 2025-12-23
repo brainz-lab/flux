@@ -1,0 +1,75 @@
+<% content_for(:title) { "Anomalies" } %>
+
+<div class="space-y-8">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-[22px] font-semibold tracking-tight" style="color: #1A1A1A;">Anomalies</h1>
+      <p class="mt-1 text-[13px]" style="color: #8B8780;">AI-detected patterns and outliers</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <% if @anomalies.any? %>
+        <span class="text-[13px]" style="color: #8B8780;">
+          <%= @anomalies.where(acknowledged: false).count %> unacknowledged
+        </span>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @anomalies.any? %>
+    <div class="space-y-3">
+      <% @anomalies.each do |anomaly| %>
+        <div class="px-5 py-4 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+          <div class="flex items-start justify-between">
+            <div class="flex items-start gap-3">
+              <% severity_colors = { 'critical' => '#DC2626', 'warning' => '#D97706', 'info' => '#2563EB' } %>
+              <div class="mt-0.5 w-2 h-2 rounded-full" style="background: <%= severity_colors[anomaly.severity] || '#6B6760' %>;"></div>
+              <div class="space-y-1">
+                <h3 class="text-[15px] font-medium" style="color: #1A1A1A;">
+                  <%= anomaly.anomaly_type.titleize %> in <%= anomaly.source_name %>
+                </h3>
+                <p class="text-[13px]" style="color: #8B8780;">
+                  <% if anomaly.expected_value && anomaly.actual_value %>
+                    Expected <%= number_with_precision(anomaly.expected_value, precision: 2) %>,
+                    got <%= number_with_precision(anomaly.actual_value, precision: 2) %>
+                    <% if anomaly.deviation_percent %>
+                      (<%= anomaly.deviation_percent > 0 ? '+' : '' %><%= number_with_precision(anomaly.deviation_percent, precision: 1) %>%)
+                    <% end %>
+                  <% else %>
+                    Anomaly detected in <%= anomaly.source %>
+                  <% end %>
+                </p>
+                <p class="text-[12px]" style="color: #A8A49E;">
+                  Detected <%= time_ago_in_words(anomaly.detected_at) %> ago
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 text-[11px] font-medium rounded-full capitalize" style="background: <%= anomaly.severity == 'critical' ? '#FEE2E2' : anomaly.severity == 'warning' ? '#FEF3C7' : '#DBEAFE' %>; color: <%= severity_colors[anomaly.severity] || '#6B6760' %>;">
+                <%= anomaly.severity %>
+              </span>
+              <% if anomaly.acknowledged %>
+                <span class="px-2 py-0.5 text-[11px] font-medium rounded-full" style="background: #F0EFED; color: #6B6760;">
+                  Acknowledged
+                </span>
+              <% else %>
+                <%= button_to dashboard_anomaly_acknowledge_path(anomaly), method: :post, class: "px-2 py-0.5 text-[11px] font-medium rounded-full transition-colors hover:bg-[#E8E5E0]", style: "background: #F0EFED; color: #6B6760;" do %>
+                  Acknowledge
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-16 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <div class="space-y-3">
+        <svg class="mx-auto w-12 h-12" style="color: #C4C1BC;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <p class="text-[15px]" style="color: #6B6760;">No anomalies detected</p>
+        <p class="text-[13px]" style="color: #8B8780;">Flux will automatically detect unusual patterns in your metrics</p>
+      </div>
+    </div>
+  <% end %>
+</div>

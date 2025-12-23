@@ -1,0 +1,63 @@
+<% content_for(:title) { "MCP Setup" } %>
+
+<div class="space-y-8">
+  <div>
+    <h1 class="text-[22px] font-semibold tracking-tight" style="color: #1A1A1A;">MCP Integration</h1>
+    <p class="mt-1 text-[13px]" style="color: #8B8780;">Connect Flux to Claude Desktop or Cursor</p>
+  </div>
+
+  <div class="space-y-6">
+    <div class="px-6 py-5 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <h2 class="text-[15px] font-medium mb-4" style="color: #1A1A1A;">Claude Desktop Configuration</h2>
+      <p class="text-[13px] mb-3" style="color: #6B6760;">Add this to your <code class="px-1.5 py-0.5 rounded" style="background: #F0EFED;">claude_desktop_config.json</code>:</p>
+      <pre class="p-4 rounded-lg text-[13px] overflow-x-auto" style="background: #1A1A1A; color: #E8E5E0;"><code>{
+  "mcpServers": {
+    "flux": {
+      "command": "curl",
+      "args": [
+        "-X", "POST",
+        "-H", "Content-Type: application/json",
+        "-H", "Authorization: Bearer <%= @project.api_key %>",
+        "<%= request.base_url %>/mcp/rpc"
+      ]
+    }
+  }
+}</code></pre>
+    </div>
+
+    <div class="px-6 py-5 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <h2 class="text-[15px] font-medium mb-4" style="color: #1A1A1A;">Available Tools</h2>
+      <div class="space-y-3">
+        <% @tools.each do |tool| %>
+          <div class="flex items-start gap-3 p-3 rounded-lg" style="background: #FAF9F7;">
+            <code class="text-[13px] font-medium px-2 py-0.5 rounded" style="background: #E8E5E0; color: #1A1A1A;"><%= tool[:name] %></code>
+            <span class="text-[13px]" style="color: #6B6760;"><%= tool[:description] %></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="px-6 py-5 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+      <h2 class="text-[15px] font-medium mb-4" style="color: #1A1A1A;">Example Usage</h2>
+      <p class="text-[13px] mb-3" style="color: #6B6760;">Once connected, you can ask Claude questions like:</p>
+      <ul class="space-y-2 text-[13px]" style="color: #6B6760;">
+        <li class="flex items-start gap-2">
+          <span style="color: #C4C1BC;">•</span>
+          "Show me all signup events from today"
+        </li>
+        <li class="flex items-start gap-2">
+          <span style="color: #C4C1BC;">•</span>
+          "What's the current value of api.requests metric?"
+        </li>
+        <li class="flex items-start gap-2">
+          <span style="color: #C4C1BC;">•</span>
+          "Are there any anomalies detected?"
+        </li>
+        <li class="flex items-start gap-2">
+          <span style="color: #C4C1BC;">•</span>
+          "Track a user signup event for user 123"
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

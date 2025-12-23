@@ -1,0 +1,108 @@
+<% content_for(:title) { @metric.display_name || @metric.name } %>
+
+<div class="space-y-8">
+  <div>
+    <a href="<%= dashboard_metrics_path %>" class="inline-flex items-center gap-1 text-[13px] hover:underline" style="color: #8B8780;">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+      Metrics
+    </a>
+    <h1 class="mt-3 text-[22px] font-semibold tracking-tight" style="color: #1A1A1A;"><%= @metric.display_name || @metric.name %></h1>
+    <p class="mt-1 text-[13px]" style="color: #8B8780;">
+      <%= @metric.metric_type.capitalize %><%= @metric.unit.present? ? " · #{@metric.unit}" : "" %>
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2">
+      <div class="px-5 py-4 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-[14px] font-medium" style="color: #1A1A1A;">Time Series</h2>
+          <div class="flex items-center gap-2">
+            <button class="px-2 py-1 text-[12px] rounded" style="background: #F0EFED; color: #6B6760;">1h</button>
+            <button class="px-2 py-1 text-[12px] rounded" style="background: #1A1A1A; color: #FFFFFE;">24h</button>
+            <button class="px-2 py-1 text-[12px] rounded" style="background: #F0EFED; color: #6B6760;">7d</button>
+            <button class="px-2 py-1 text-[12px] rounded" style="background: #F0EFED; color: #6B6760;">30d</button>
+          </div>
+        </div>
+        <div class="h-64 flex items-center justify-center rounded-lg" style="background: #FAF9F7;" data-controller="chart">
+          <p class="text-[13px]" style="color: #8B8780;">Chart will render here</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      <div class="px-5 py-4 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+        <h2 class="text-[14px] font-medium mb-4" style="color: #1A1A1A;">Statistics</h2>
+        <% if @stats.present? %>
+          <p class="text-[32px] font-semibold" style="color: #1A1A1A;">
+            <%= number_with_precision(@stats[:avg] || @stats[:sum] || @stats[:count] || 0, precision: 2) %>
+            <% if @metric.unit.present? %>
+              <span class="text-[14px] font-normal" style="color: #8B8780;"><%= @metric.unit %></span>
+            <% end %>
+          </p>
+          <div class="mt-3 grid grid-cols-2 gap-3">
+            <% if @stats[:min].present? %>
+              <div>
+                <p class="text-[11px]" style="color: #8B8780;">Min</p>
+                <p class="text-[14px] font-medium" style="color: #1A1A1A;"><%= number_with_precision(@stats[:min], precision: 2) %></p>
+              </div>
+            <% end %>
+            <% if @stats[:max].present? %>
+              <div>
+                <p class="text-[11px]" style="color: #8B8780;">Max</p>
+                <p class="text-[14px] font-medium" style="color: #1A1A1A;"><%= number_with_precision(@stats[:max], precision: 2) %></p>
+              </div>
+            <% end %>
+            <% if @stats[:count].present? %>
+              <div>
+                <p class="text-[11px]" style="color: #8B8780;">Count</p>
+                <p class="text-[14px] font-medium" style="color: #1A1A1A;"><%= @stats[:count] %></p>
+              </div>
+            <% end %>
+            <% if @stats[:sum].present? %>
+              <div>
+                <p class="text-[11px]" style="color: #8B8780;">Sum</p>
+                <p class="text-[14px] font-medium" style="color: #1A1A1A;"><%= number_with_precision(@stats[:sum], precision: 2) %></p>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-[14px]" style="color: #8B8780;">No data</p>
+        <% end %>
+      </div>
+
+      <div class="px-5 py-4 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+        <h2 class="text-[14px] font-medium mb-4" style="color: #1A1A1A;">Definition</h2>
+        <dl class="space-y-3">
+          <div class="flex justify-between">
+            <dt class="text-[13px]" style="color: #8B8780;">Name</dt>
+            <dd class="text-[13px] font-mono" style="color: #1A1A1A;"><%= @metric.name %></dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-[13px]" style="color: #8B8780;">Type</dt>
+            <dd class="text-[13px]" style="color: #1A1A1A;"><%= @metric.metric_type %></dd>
+          </div>
+          <% if @metric.unit.present? %>
+            <div class="flex justify-between">
+              <dt class="text-[13px]" style="color: #8B8780;">Unit</dt>
+              <dd class="text-[13px]" style="color: #1A1A1A;"><%= @metric.unit %></dd>
+            </div>
+          <% end %>
+          <div class="flex justify-between">
+            <dt class="text-[13px]" style="color: #8B8780;">Created</dt>
+            <dd class="text-[13px]" style="color: #1A1A1A;"><%= @metric.created_at.strftime("%b %d, %Y") %></dd>
+          </div>
+        </dl>
+      </div>
+
+      <% if @metric.description.present? %>
+        <div class="px-5 py-4 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+          <h2 class="text-[14px] font-medium mb-2" style="color: #1A1A1A;">Description</h2>
+          <p class="text-[13px]" style="color: #6B6760;"><%= @metric.description %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

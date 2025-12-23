@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <title>Flux - <%= content_for(:title) || "Dashboard" %></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+<body class="h-full antialiased" style="font-family: 'Inter', system-ui, sans-serif; background: #FAF9F7;">
+  <div class="min-h-full">
+    <!-- Header -->
+    <header class="border-b" style="border-color: #E8E5E0; background: #FFFFFE;">
+      <div class="mx-auto max-w-5xl px-6">
+        <div class="flex h-16 items-center justify-between">
+          <%= link_to dashboard_root_path, class: "flex items-center gap-2.5" do %>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <rect x="2" y="2" width="16" height="16" rx="3" fill="#F97316"/>
+              <path d="M6 14V8M10 14V6M14 14V10" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span class="text-[15px] font-semibold tracking-tight" style="color: #1A1A1A;">Flux</span>
+          <% end %>
+
+          <% if Rails.env.development? && !@project&.persisted? %>
+            <%= link_to dashboard_root_path, class: "text-[13px] font-medium px-3 py-1.5 rounded-lg transition-colors hover:opacity-80", style: "background: #FEF3C7; color: #92400E;" do %>
+              Dev Tools
+            <% end %>
+          <% end %>
+
+          <% if @project&.persisted? %>
+            <div class="flex items-center gap-6">
+              <div class="flex items-center gap-3">
+                <span style="color: #C4C0B8;">/</span>
+                <%= link_to @project.name || "Project", dashboard_root_path, class: "text-[14px] hover:underline", style: "color: #6B6760;" %>
+              </div>
+              <nav class="flex items-center gap-4 text-[13px]">
+                <%= link_to "Overview", dashboard_root_path, class: "font-medium transition-colors", style: "color: #{controller_name == 'overview' ? '#1A1A1A' : '#8B8780'};" %>
+                <%= link_to "Events", dashboard_events_path, class: "font-medium transition-colors", style: "color: #{controller_name == 'events' ? '#1A1A1A' : '#8B8780'};" %>
+                <%= link_to "Metrics", dashboard_metrics_path, class: "font-medium transition-colors", style: "color: #{controller_name == 'metrics' ? '#1A1A1A' : '#8B8780'};" %>
+                <%= link_to "Dashboards", dashboard_dashboards_path, class: "font-medium transition-colors", style: "color: #{controller_name == 'dashboards' || controller_name == 'widgets' ? '#1A1A1A' : '#8B8780'};" %>
+                <%= link_to "Anomalies", dashboard_anomalies_path, class: "font-medium transition-colors", style: "color: #{controller_name == 'anomalies' ? '#1A1A1A' : '#8B8780'};" %>
+                <%= link_to "Setup", dashboard_setup_path, class: "font-medium transition-colors", style: "color: #{controller_name == 'setup' ? '#1A1A1A' : '#8B8780'};" %>
+                <%= link_to "MCP", dashboard_mcp_path, class: "font-medium transition-colors", style: "color: #{controller_name == 'mcp_setup' ? '#1A1A1A' : '#8B8780'};" %>
+              </nav>
+              <% if Rails.env.development? %>
+                <%= link_to dashboard_dev_tools_path, class: "text-[13px] font-medium px-3 py-1.5 rounded-lg transition-colors hover:opacity-80", style: "background: #FEF3C7; color: #92400E;" do %>
+                  Dev Tools
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="mx-auto max-w-5xl px-6 py-10">
+      <% if notice %>
+        <div class="mb-6 px-4 py-3 rounded-lg text-[14px]" style="background: #E8F5E8; color: #2D5A2D;">
+          <%= notice %>
+        </div>
+      <% end %>
+      <% if alert %>
+        <div class="mb-6 px-4 py-3 rounded-lg text-[14px]" style="background: #FEE8E8; color: #8B2D2D;">
+          <%= alert %>
+        </div>
+      <% end %>
+      <%= yield %>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<% content_for(:title) { "Events" } %>
+
+<div class="space-y-6">
+  <div class="md:flex md:items-center md:justify-between">
+    <div class="min-w-0 flex-1">
+      <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+        Events
+      </h2>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-4">
+    <!-- Sidebar with event counts -->
+    <div class="lg:col-span-1">
+      <div class="overflow-hidden rounded-lg bg-white shadow">
+        <div class="px-4 py-5 sm:px-6">
+          <h3 class="text-sm font-semibold text-gray-900">Event Types</h3>
+        </div>
+        <ul role="list" class="divide-y divide-gray-200">
+          <% @event_counts.each do |name, count| %>
+            <li>
+              <%= link_to dashboard_events_path(name: name),
+                  class: "block px-4 py-3 hover:bg-gray-50 #{params[:name] == name ? 'bg-orange-50' : ''}" do %>
+                <div class="flex items-center justify-between">
+                  <p class="truncate text-sm font-medium text-gray-900"><%= name %></p>
+                  <span class="text-sm text-gray-500"><%= number_with_delimiter(count) %></span>
+                </div>
+              <% end %>
+            </li>
+          <% end %>
+          <% if @event_counts.empty? %>
+            <li class="px-4 py-3 text-sm text-gray-500">No events tracked yet</li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Event list -->
+    <div class="lg:col-span-3">
+      <div class="overflow-hidden rounded-lg bg-white shadow">
+        <table class="min-w-full divide-y divide-gray-300">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">Name</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Timestamp</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">User</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Value</th>
+              <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                <span class="sr-only">View</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 bg-white">
+            <% @events.each do |event| %>
+              <tr>
+                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-orange-600">
+                  <%= event.name %>
+                </td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                  <%= event.timestamp.strftime("%Y-%m-%d %H:%M:%S") %>
+                </td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                  <%= event.user_id || "-" %>
+                </td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                  <%= event.value || "-" %>
+                </td>
+                <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                  <%= link_to "View", dashboard_event_path(event), class: "text-orange-600 hover:text-orange-900" %>
+                </td>
+              </tr>
+            <% end %>
+            <% if @events.empty? %>
+              <tr>
+                <td colspan="5" class="py-8 text-center text-sm text-gray-500">No events found</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
