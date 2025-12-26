@@ -19,13 +19,13 @@
         <ul role="list" class="divide-y divide-gray-200">
           <% @event_counts.each do |name, count| %>
             <li>
-              <%= link_to dashboard_events_path(name: name),
-                  class: "block px-4 py-3 hover:bg-gray-50 #{params[:name] == name ? 'bg-orange-50' : ''}" do %>
+              <% active = params[:name] == name ? "bg-orange-50" : "" %>
+              <a href="<%= dashboard_project_events_path(@project, name: name) %>" class="block px-4 py-3 hover:bg-gray-50 <%= active %>">
                 <div class="flex items-center justify-between">
                   <p class="truncate text-sm font-medium text-gray-900"><%= name %></p>
                   <span class="text-sm text-gray-500"><%= number_with_delimiter(count) %></span>
                 </div>
-              <% end %>
+              </a>
             </li>
           <% end %>
           <% if @event_counts.empty? %>
@@ -66,7 +66,7 @@
                   <%= event.value || "-" %>
                 </td>
                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                  <%= link_to "View", dashboard_event_path(event), class: "text-orange-600 hover:text-orange-900" %>
+                  <%= link_to "View", dashboard_project_event_path(@project, event), class: "text-orange-600 hover:text-orange-900" %>
                 </td>
               </tr>
             <% end %>

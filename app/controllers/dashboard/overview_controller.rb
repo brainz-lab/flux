@@ -4,18 +4,18 @@ module Dashboard
   class OverviewController < BaseController
     def index
       @since = parse_since(params[:since] || "24h")
+      @overview = current_project.overview(since: @since)
 
+      # For backward compatibility with the view
       @stats = {
-        events_total: current_project.events.since(@since).count,
-        metrics_total: current_project.metric_definitions.count,
-        anomalies_count: current_project.anomalies.since(@since).unacknowledged.count,
-        dashboards_count: current_project.flux_dashboards.count
+        events_total: @overview[:events_total],
+        metrics_total: @overview[:metrics_total],
+        anomalies_count: @overview[:anomalies_unacknowledged],
+        dashboards_count: @overview[:dashboards_count]
       }
 
-      @recent_events = current_project.events.since(@since).group(:name).count
-                                      .sort_by { |_, v| -v }.first(10).to_h
-
-      @recent_anomalies = current_project.anomalies.since(@since).recent.limit(5)
+      @recent_events = @overview[:top_events]
+      @recent_anomalies = @overview[:recent_anomalies]
     end
 
     private

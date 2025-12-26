@@ -12,29 +12,29 @@ module Dashboard
     private
 
     def authenticate_via_sso!
-      if Rails.env.development?
-        session[:platform_project_id] ||= "dev_project"
-        return
-      end
+      # In development, allow access
+      return if Rails.env.development?
 
-      unless session[:platform_project_id]
+      unless session[:platform_user_id]
         platform_url = ENV.fetch("BRAINZLAB_PLATFORM_URL", "http://platform:3000")
         redirect_to "#{platform_url}/auth/sso?product=flux&return_to=#{request.url}", allow_other_host: true
       end
     end
 
     def set_project
-      @project = Project.find_or_create_for_platform!(
-        platform_project_id: session[:platform_project_id],
-        name: Rails.env.development? ? "Development" : nil,
-        environment: Rails.env.development? ? "development" : "production"
-      )
-    rescue ActiveRecord::RecordInvalid => e
-      render plain: "Failed to initialize project: #{e.message}", status: :internal_server_error
+      return unless params[:project_id].present?
+
+      @project = Project.find(params[:project_id])
+    rescue ActiveRecord::RecordNotFound
+      redirect_to dashboard_projects_path, alert: "Project not found"
     end
 
     def current_project
       @project
+    end
+
+    def require_project!
+      redirect_to dashboard_projects_path, alert: "Please select a project" unless @project
     end
   end
 end

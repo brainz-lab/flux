@@ -2,7 +2,7 @@
 
 <div class="space-y-8">
   <div>
-    <a href="<%= dashboard_dashboard_path(@dashboard) %>" class="inline-flex items-center gap-1 text-[13px] hover:underline" style="color: #8B8780;">
+    <a href="<%= dashboard_project_dashboard_path(@project, @dashboard) %>" class="inline-flex items-center gap-1 text-[13px] hover:underline" style="color: #8B8780;">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
       </svg>
@@ -13,7 +13,7 @@
   </div>
 
   <div class="px-6 py-5 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
-    <%= form_with model: @widget, url: dashboard_dashboard_widgets_path(@dashboard), class: "space-y-6" do |f| %>
+    <%= form_with model: @widget, url: dashboard_project_dashboard_widgets_path(@project, @dashboard), class: "space-y-6" do |f| %>
       <% if @widget.errors.any? %>
         <div class="p-4 rounded-lg" style="background: #FEE2E2; border: 1px solid #FECACA;">
           <p class="text-[13px] font-medium" style="color: #DC2626;">Please fix the following errors:</p>
@@ -46,7 +46,7 @@
 
       <div class="flex items-center gap-3 pt-4" style="border-top: 1px solid #E8E5E0;">
         <%= f.submit "Add Widget", class: "px-4 py-2 text-[13px] font-medium rounded-lg cursor-pointer transition-colors", style: "background: #1A1A1A; color: #FFFFFE;" %>
-        <a href="<%= dashboard_dashboard_path(@dashboard) %>" class="px-4 py-2 text-[13px] font-medium rounded-lg transition-colors" style: "color: #6B6760;">
+        <a href="<%= dashboard_project_dashboard_path(@project, @dashboard) %>" class="px-4 py-2 text-[13px] font-medium rounded-lg transition-colors" style: "color: #6B6760;">
           Cancel
         </a>
       </div>

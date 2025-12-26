@@ -28,7 +28,7 @@ module Dashboard
       @anomaly.acknowledge!
 
       respond_to do |format|
-        format.html { redirect_back fallback_location: dashboard_anomalies_path, notice: "Anomaly acknowledged." }
+        format.html { redirect_back fallback_location: dashboard_project_anomalies_path(current_project), notice: "Anomaly acknowledged." }
         format.turbo_stream
       end
     end

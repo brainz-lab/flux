@@ -45,22 +45,29 @@ Rails.application.routes.draw do
 
   # Dashboard (web UI)
   namespace :dashboard do
-    root to: "overview#index"
+    root to: "projects#index"
 
-    resources :events, only: [:index, :show]
-    resources :metrics, only: [:index, :show]
-    resources :dashboards do
-      resources :widgets
-    end
-    resources :anomalies, only: [:index, :show] do
+    resources :projects, only: [:index, :new, :create] do
       member do
-        post :acknowledge
+        get :settings
       end
-    end
 
-    get "setup", to: "setup#index"
-    get "mcp", to: "mcp_setup#index"
-    get "dev_tools", to: "dev_tools#index"
+      # Nested under project
+      get "/", to: "overview#index", as: :overview
+      resources :events, only: [:index, :show]
+      resources :metrics, only: [:index, :show]
+      resources :dashboards do
+        resources :widgets
+      end
+      resources :anomalies, only: [:index, :show] do
+        member do
+          post :acknowledge
+        end
+      end
+      get "setup", to: "setup#index"
+      get "mcp", to: "mcp_setup#index"
+      get "dev_tools", to: "dev_tools#index"
+    end
   end
 
   # SSO callback

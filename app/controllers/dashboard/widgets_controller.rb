@@ -20,7 +20,7 @@ module Dashboard
       @widget = @dashboard.widgets.new(widget_params)
 
       if @widget.save
-        redirect_to dashboard_dashboard_path(@dashboard), notice: "Widget added."
+        redirect_to dashboard_project_dashboard_path(current_project, @dashboard), notice: "Widget added."
       else
         render :new, status: :unprocessable_entity
       end
@@ -31,7 +31,7 @@ module Dashboard
 
     def update
       if @widget.update(widget_params)
-        redirect_to dashboard_dashboard_path(@dashboard), notice: "Widget updated."
+        redirect_to dashboard_project_dashboard_path(current_project, @dashboard), notice: "Widget updated."
       else
         render :edit, status: :unprocessable_entity
       end
@@ -39,7 +39,7 @@ module Dashboard
 
     def destroy
       @widget.destroy
-      redirect_to dashboard_dashboard_path(@dashboard), notice: "Widget removed."
+      redirect_to dashboard_project_dashboard_path(current_project, @dashboard), notice: "Widget removed."
     end
 
     private

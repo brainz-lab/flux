@@ -20,7 +20,7 @@ module Dashboard
       @dashboard = current_project.flux_dashboards.new(dashboard_params)
 
       if @dashboard.save
-        redirect_to dashboard_dashboard_path(@dashboard), notice: "Dashboard created."
+        redirect_to dashboard_project_dashboard_path(current_project, @dashboard), notice: "Dashboard created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -31,7 +31,7 @@ module Dashboard
 
     def update
       if @dashboard.update(dashboard_params)
-        redirect_to dashboard_dashboard_path(@dashboard), notice: "Dashboard updated."
+        redirect_to dashboard_project_dashboard_path(current_project, @dashboard), notice: "Dashboard updated."
       else
         render :edit, status: :unprocessable_entity
       end
@@ -39,7 +39,7 @@ module Dashboard
 
     def destroy
       @dashboard.destroy
-      redirect_to dashboard_dashboards_path, notice: "Dashboard deleted."
+      redirect_to dashboard_project_dashboards_path(current_project), notice: "Dashboard deleted."
     end
 
     private
