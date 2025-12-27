@@ -15,7 +15,7 @@ class SsoController < ApplicationController
       # Ensure local project exists
       find_or_create_project(project_data)
 
-      redirect_to params[:return_to] || dashboard_root_path
+      redirect_to params[:return_to] || dashboard_root_path, allow_other_host: true
     else
       redirect_to root_path, alert: "Invalid SSO token"
     end

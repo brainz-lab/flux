@@ -17,6 +17,10 @@ Rails.application.routes.draw do
       post "metrics", to: "metrics#create"
       post "metrics/batch", to: "metrics#batch"
       get "metrics", to: "metrics#index"
+      # Signal integration endpoints (must be before :name routes)
+      get "metrics/query", to: "metrics#signal_query"
+      get "metrics/baseline", to: "metrics#baseline"
+      get "metrics/last", to: "metrics#last"
       get "metrics/:name", to: "metrics#show", constraints: { name: /[^\/]+/ }
       get "metrics/:name/query", to: "metrics#query", constraints: { name: /[^\/]+/ }
 
