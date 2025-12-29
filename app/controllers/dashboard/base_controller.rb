@@ -24,7 +24,7 @@ module Dashboard
     def set_project
       return unless params[:project_id].present?
 
-      @project = Project.find(params[:project_id])
+      @project = Project.find_by(slug: params[:project_id]) || Project.find(params[:project_id])
     rescue ActiveRecord::RecordNotFound
       redirect_to dashboard_projects_path, alert: "Project not found"
     end

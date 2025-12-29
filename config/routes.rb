@@ -51,7 +51,7 @@ Rails.application.routes.draw do
   namespace :dashboard do
     root to: "projects#index"
 
-    resources :projects, only: [:index, :new, :create] do
+    resources :projects, only: [:index, :show, :new, :create] do
       member do
         get :settings
       end

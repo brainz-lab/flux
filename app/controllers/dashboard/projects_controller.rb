@@ -57,6 +57,8 @@ module Dashboard
     end
 
     def set_project
+      @project = Project.find_by!(slug: params[:id])
+    rescue ActiveRecord::RecordNotFound
       @project = Project.find(params[:id])
     end
 
