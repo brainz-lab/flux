@@ -79,6 +79,28 @@ CREATE TABLE public.events (
 
 
 --
+-- Name: metric_points; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.metric_points (
+    project_id uuid NOT NULL,
+    metric_name text NOT NULL,
+    "timestamp" timestamp with time zone NOT NULL,
+    value double precision,
+    sum double precision,
+    count double precision,
+    min double precision,
+    max double precision,
+    p50 double precision,
+    p95 double precision,
+    p99 double precision,
+    cardinality integer,
+    hll_data bytea,
+    tags jsonb DEFAULT '{}'::jsonb
+);
+
+
+--
 -- Name: aggregated_metrics; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -170,28 +192,6 @@ CREATE TABLE public.metric_definitions (
     aggregations jsonb DEFAULT '[]'::jsonb,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: metric_points; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.metric_points (
-    project_id uuid NOT NULL,
-    metric_name text NOT NULL,
-    "timestamp" timestamp with time zone NOT NULL,
-    value double precision,
-    sum double precision,
-    count double precision,
-    min double precision,
-    max double precision,
-    p50 double precision,
-    p95 double precision,
-    p99 double precision,
-    cardinality integer,
-    hll_data bytea,
-    tags jsonb DEFAULT '{}'::jsonb
 );
 
 
