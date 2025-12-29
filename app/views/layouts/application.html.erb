@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title><%= content_for(:title) || "Flux" %></title>
+    <title><%= content_for(:title) || "Flux" %> - Flux by Brainz Lab</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Flux">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#F97316">
+    <meta name="description" content="Flux - Track anything, see everything. Custom metrics and events platform by Brainz Lab.">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -18,12 +20,35 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
+    <%# Google Fonts - Inter %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <style>
+      :root {
+        --color-cream-50: #FAF9F7;
+        --color-cream-100: #F5F3EF;
+        --color-cream-200: #E8E5E0;
+        --color-ink-900: #1A1A1A;
+        --color-ink-600: #525252;
+        --color-flux: #F97316;
+      }
+      body {
+        font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+        background-color: var(--color-cream-50);
+        color: var(--color-ink-900);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    </style>
   </head>
 
-  <body>
+  <body class="antialiased min-h-screen">
     <main class="container mx-auto mt-28 px-5 flex">
       <%= yield %>
     </main>

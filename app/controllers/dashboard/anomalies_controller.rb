@@ -11,11 +11,16 @@ module Dashboard
 
       @anomalies = @anomalies.limit(50)
 
+      # Use a single query with GROUP BY to count severities, avoiding N+1
+      base_scope = current_project.anomalies.since(@since)
+      severity_counts = base_scope.group(:severity).count
+      unacknowledged_count = base_scope.unacknowledged.count
+
       @summary = {
-        critical: current_project.anomalies.since(@since).critical.count,
-        warning: current_project.anomalies.since(@since).warnings.count,
-        info: current_project.anomalies.since(@since).by_severity("info").count,
-        unacknowledged: current_project.anomalies.since(@since).unacknowledged.count
+        critical: severity_counts["critical"] || 0,
+        warning: severity_counts["warning"] || 0,
+        info: severity_counts["info"] || 0,
+        unacknowledged: unacknowledged_count
       }
     end
 

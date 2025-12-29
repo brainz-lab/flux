@@ -1,35 +1,36 @@
 <% content_for(:title) { "Events" } %>
 
-<div class="space-y-6">
-  <div class="md:flex md:items-center md:justify-between">
-    <div class="min-w-0 flex-1">
-      <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-        Events
-      </h2>
+<div class="space-y-8">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-[22px] font-semibold tracking-tight" style="color: #1A1A1A;">Events</h1>
+      <p class="mt-1 text-[13px]" style="color: #8B8780;">View and filter tracked events</p>
     </div>
   </div>
 
   <div class="grid grid-cols-1 gap-6 lg:grid-cols-4">
     <!-- Sidebar with event counts -->
     <div class="lg:col-span-1">
-      <div class="overflow-hidden rounded-lg bg-white shadow">
-        <div class="px-4 py-5 sm:px-6">
-          <h3 class="text-sm font-semibold text-gray-900">Event Types</h3>
+      <div class="rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+        <div class="px-5 py-4 border-b" style="border-color: #E8E5E0;">
+          <h3 class="text-[13px] font-semibold uppercase tracking-wide" style="color: #8B8780;">Event Types</h3>
         </div>
-        <ul role="list" class="divide-y divide-gray-200">
+        <ul role="list" class="divide-y" style="border-color: #E8E5E0;">
           <% @event_counts.each do |name, count| %>
             <li>
-              <% active = params[:name] == name ? "bg-orange-50" : "" %>
-              <a href="<%= dashboard_project_events_path(@project, name: name) %>" class="block px-4 py-3 hover:bg-gray-50 <%= active %>">
+              <% active = params[:name] == name %>
+              <a href="<%= dashboard_project_events_path(@project, name: name) %>"
+                 class="block px-5 py-3 transition-colors"
+                 style="<%= active ? 'background: rgba(249, 115, 22, 0.1);' : '' %>">
                 <div class="flex items-center justify-between">
-                  <p class="truncate text-sm font-medium text-gray-900"><%= name %></p>
-                  <span class="text-sm text-gray-500"><%= number_with_delimiter(count) %></span>
+                  <p class="truncate text-[14px] font-medium" style="color: <%= active ? '#F97316' : '#1A1A1A' %>;"><%= name %></p>
+                  <span class="text-[13px] tabular-nums" style="color: #8B8780;"><%= number_with_delimiter(count) %></span>
                 </div>
               </a>
             </li>
           <% end %>
           <% if @event_counts.empty? %>
-            <li class="px-4 py-3 text-sm text-gray-500">No events tracked yet</li>
+            <li class="px-5 py-4 text-[13px]" style="color: #8B8780;">No events tracked yet</li>
           <% end %>
         </ul>
       </div>
@@ -37,42 +38,49 @@
 
     <!-- Event list -->
     <div class="lg:col-span-3">
-      <div class="overflow-hidden rounded-lg bg-white shadow">
-        <table class="min-w-full divide-y divide-gray-300">
-          <thead class="bg-gray-50">
+      <div class="rounded-xl overflow-hidden" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+        <table class="min-w-full">
+          <thead style="background: #FAF9F7;">
             <tr>
-              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">Name</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Timestamp</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">User</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Value</th>
-              <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+              <th scope="col" class="py-3.5 pl-5 pr-3 text-left text-[12px] font-semibold uppercase tracking-wide" style="color: #8B8780;">Name</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-[12px] font-semibold uppercase tracking-wide" style="color: #8B8780;">Timestamp</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-[12px] font-semibold uppercase tracking-wide" style="color: #8B8780;">User</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-[12px] font-semibold uppercase tracking-wide" style="color: #8B8780;">Value</th>
+              <th scope="col" class="relative py-3.5 pl-3 pr-5">
                 <span class="sr-only">View</span>
               </th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200 bg-white">
+          <tbody class="divide-y" style="border-color: #E8E5E0;">
             <% @events.each do |event| %>
-              <tr>
-                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-orange-600">
+              <tr class="hover:bg-[#FAF9F7] transition-colors">
+                <td class="whitespace-nowrap py-4 pl-5 pr-3 text-[14px] font-medium" style="color: #F97316;">
                   <%= event.name %>
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                <td class="whitespace-nowrap px-3 py-4 text-[13px] tabular-nums" style="color: #6B6760;">
                   <%= event.timestamp.strftime("%Y-%m-%d %H:%M:%S") %>
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                <td class="whitespace-nowrap px-3 py-4 text-[13px]" style="color: #6B6760;">
                   <%= event.user_id || "-" %>
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                <td class="whitespace-nowrap px-3 py-4 text-[13px] tabular-nums" style="color: #6B6760;">
                   <%= event.value || "-" %>
                 </td>
-                <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                  <%= link_to "View", dashboard_project_event_path(@project, event), class: "text-orange-600 hover:text-orange-900" %>
+                <td class="relative whitespace-nowrap py-4 pl-3 pr-5 text-right text-[13px] font-medium">
+                  <%= link_to "View", dashboard_project_event_path(@project, event), style: "color: #F97316;", class: "hover:underline" %>
                 </td>
               </tr>
             <% end %>
             <% if @events.empty? %>
               <tr>
-                <td colspan="5" class="py-8 text-center text-sm text-gray-500">No events found</td>
+                <td colspan="5" class="py-12 text-center text-[14px]" style="color: #8B8780;">
+                  <div class="space-y-2">
+                    <svg class="mx-auto w-10 h-10" style="color: #C4C1BC;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    <p>No events found</p>
+                  </div>
+                </td>
               </tr>
             <% end %>
           </tbody>
