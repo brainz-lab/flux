@@ -1,24 +1,36 @@
-# README
+# Flux
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Custom metrics and events platform for Rails apps.
 
-Things you may want to cover:
+[![CI](https://github.com/brainz-lab/flux/actions/workflows/ci.yml/badge.svg)](https://github.com/brainz-lab/flux/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/brainz-lab/flux/actions/workflows/codeql.yml/badge.svg)](https://github.com/brainz-lab/flux/actions/workflows/codeql.yml)
+[![License: OSAaSy](https://img.shields.io/badge/License-OSAaSy-blue.svg)](LICENSE)
+[![Ruby](https://img.shields.io/badge/Ruby-3.2+-red.svg)](https://www.ruby-lang.org)
 
-* Ruby version
+## Overview
 
-* System dependencies
+Flux is a custom metrics and events platform that lets you track anything and see everything in your Rails applications.
 
-* Configuration
+- **Custom Events** - Track any event with structured properties
+- **Metrics** - Gauge, counter, distribution, and set types
+- **Dashboards** - Build custom dashboards with widgets
+- **Anomaly Detection** - AI-powered spike and drop detection
+- **Real-time** - Live updates via WebSockets
 
-* Database creation
+## Installation
 
-* Database initialization
+```bash
+bin/setup
+```
 
-* How to run the test suite
+## Development
 
-* Services (job queues, cache servers, search engines, etc.)
+```bash
+bin/rails server
+bin/rails test
+bin/rubocop
+```
 
-* Deployment instructions
+## License
 
-* ...
+This project is licensed under the [OSAaSy License](LICENSE).
