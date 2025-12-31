@@ -52,7 +52,7 @@ module Api
         events = events.limit(params[:limit] || 100).offset(params[:offset] || 0)
 
         render_success(
-          events: events.as_json(only: [:id, :name, :timestamp, :properties, :tags, :user_id, :value]),
+          events: events.as_json(only: [ :id, :name, :timestamp, :properties, :tags, :user_id, :value ]),
           total: current_project.events.count,
           query: filter_params
         )

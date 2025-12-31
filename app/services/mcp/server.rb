@@ -44,7 +44,7 @@ module Mcp
       when "tools/call"
         tool_name = params[:name]
         arguments = params[:arguments] || {}
-        { content: [{ type: "text", text: call_tool(tool_name, arguments).to_json }] }
+        { content: [ { type: "text", text: call_tool(tool_name, arguments).to_json } ] }
       when "initialize"
         {
           protocolVersion: "2024-11-05",

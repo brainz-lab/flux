@@ -24,7 +24,7 @@ module Mcp
             description: "Maximum number of events to return (default: 100)"
           }
         },
-        required: ["name"]
+        required: [ "name" ]
       }.freeze
 
       def call(args)

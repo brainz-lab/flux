@@ -240,7 +240,7 @@ class AnomalyDetectorTest < ActiveSupport::TestCase
 
   test "detect_trend should return nil with no clear trend" do
     # Create fluctuating data
-    [100, 50, 150, 75, 125].each_with_index do |value, i|
+    [ 100, 50, 150, 75, 125 ].each_with_index do |value, i|
       @project.metric_points.create!(
         metric_name: "test.metric",
         value: value,

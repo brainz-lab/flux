@@ -23,7 +23,7 @@ class CreateAggregatedMetrics < ActiveRecord::Migration[8.0]
     execute "SELECT create_hypertable('aggregated_metrics', 'bucket_time', if_not_exists => true);"
 
     # Composite index for queries
-    add_index :aggregated_metrics, [:project_id, :metric_name, :bucket_size, :bucket_time],
+    add_index :aggregated_metrics, [ :project_id, :metric_name, :bucket_size, :bucket_time ],
               name: 'idx_aggregated_metrics_lookup'
   end
 end

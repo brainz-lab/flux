@@ -168,9 +168,9 @@ class WidgetTest < ActiveSupport::TestCase
   test "group_by should return query group_by" do
     widget = @dashboard.widgets.create!(
       widget_type: "bar",
-      query: { group_by: ["region", "environment"] }
+      query: { group_by: [ "region", "environment" ] }
     )
-    assert_equal ["region", "environment"], widget.group_by
+    assert_equal [ "region", "environment" ], widget.group_by
   end
 
   test "group_by should default to empty array" do

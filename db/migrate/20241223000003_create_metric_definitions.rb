@@ -15,7 +15,7 @@ class CreateMetricDefinitions < ActiveRecord::Migration[8.0]
 
       t.timestamps
 
-      t.index [:project_id, :name], unique: true
+      t.index [ :project_id, :name ], unique: true
     end
   end
 end

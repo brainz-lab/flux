@@ -43,7 +43,7 @@ module Mcp
       return render json: { error: "Missing API key" }, status: :unauthorized unless key.present?
 
       @project = Project.find_by(api_key: key) || Project.find_by(ingest_key: key)
-      return render json: { error: "Invalid API key" }, status: :unauthorized unless @project
+      render json: { error: "Invalid API key" }, status: :unauthorized unless @project
     end
 
     def extract_api_key

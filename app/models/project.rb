@@ -57,7 +57,7 @@ class Project < ApplicationRecord
   # Events per hour rate
   def events_per_hour(since: 24.hours.ago)
     count = events.since(since).count
-    hours = [(Time.current - since) / 1.hour, 1].max
+    hours = [ (Time.current - since) / 1.hour, 1 ].max
     (count / hours).round(1)
   end
 

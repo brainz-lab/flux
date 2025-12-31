@@ -13,7 +13,7 @@ module Mcp
           },
           aggregation: {
             type: "string",
-            enum: ["avg", "sum", "min", "max", "p95", "p99", "count"],
+            enum: [ "avg", "sum", "min", "max", "p95", "p99", "count" ],
             description: "Aggregation function (default: avg)"
           },
           since: {
@@ -25,7 +25,7 @@ module Mcp
             description: "Time bucket for time series: 1m, 5m, 1h, 1d (auto-selected if not specified)"
           }
         },
-        required: ["name"]
+        required: [ "name" ]
       }.freeze
 
       def call(args)

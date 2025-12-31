@@ -14,7 +14,7 @@ module Api
         return render_unauthorized("Missing API key") unless key.present?
 
         @current_project = find_project_by_key(key)
-        return render_unauthorized("Invalid API key") unless @current_project
+        render_unauthorized("Invalid API key") unless @current_project
       end
 
       def extract_api_key

@@ -24,7 +24,7 @@ class CreateMetricPoints < ActiveRecord::Migration[8.0]
     execute "SELECT create_hypertable('metric_points', 'timestamp', if_not_exists => true);"
 
     # Indexes
-    add_index :metric_points, [:project_id, :metric_name, :timestamp]
+    add_index :metric_points, [ :project_id, :metric_name, :timestamp ]
 
     # GIN index for tags
     execute "CREATE INDEX idx_metric_points_tags ON metric_points USING GIN (tags jsonb_path_ops);"

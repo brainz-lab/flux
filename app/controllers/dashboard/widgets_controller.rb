@@ -3,7 +3,7 @@
 module Dashboard
   class WidgetsController < BaseController
     before_action :set_dashboard
-    before_action :set_widget, only: [:show, :edit, :update, :destroy]
+    before_action :set_widget, only: [ :show, :edit, :update, :destroy ]
 
     def index
       @widgets = @dashboard.widgets.by_position

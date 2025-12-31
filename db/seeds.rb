@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Flux seed data - demonstrates all dashboard capabilities
 
 puts "Seeding Flux..."
@@ -73,8 +74,8 @@ puts " #{metric_defs.count} metrics"
 puts "\nGenerating metric points (last 7 days)..."
 
 now = Time.current
-endpoints = ["/api/users", "/api/orders", "/api/products", "/api/payments", "/api/search"]
-environments = ["production", "staging"]
+endpoints = [ "/api/users", "/api/orders", "/api/products", "/api/payments", "/api/search" ]
+environments = [ "production", "staging" ]
 
 # Generate 7 days of data at 5-minute intervals
 # Use raw SQL for TimescaleDB hypertables (no standard primary key)
@@ -172,7 +173,7 @@ event_types = [
   { name: "user.login", properties: ->(i) { { method: %w[email google github].sample, device: %w[desktop mobile tablet].sample } } },
   { name: "user.logout", properties: ->(i) { {} } },
   { name: "page.view", properties: ->(i) { { page: %w[/ /pricing /features /docs /blog].sample, referrer: %w[google direct twitter linkedin].sample } } },
-  { name: "order.created", properties: ->(i) { { amount: rand(25..500).round(2), items: rand(1..5), coupon: [nil, "SAVE10", "WELCOME20"].sample } } },
+  { name: "order.created", properties: ->(i) { { amount: rand(25..500).round(2), items: rand(1..5), coupon: [ nil, "SAVE10", "WELCOME20" ].sample } } },
   { name: "order.completed", properties: ->(i) { { amount: rand(25..500).round(2), payment_method: %w[card paypal apple_pay].sample } } },
   { name: "order.refunded", properties: ->(i) { { reason: %w[defective wrong_item changed_mind].sample } } },
   { name: "error.occurred", properties: ->(i) { { type: %w[ValidationError TimeoutError AuthError NotFoundError].sample, endpoint: endpoints.sample } } },
@@ -285,7 +286,7 @@ Widget.create!(
   flux_dashboard: overview,
   title: "Request Volume",
   widget_type: "graph",
-  query: { source: "metrics", metric: "api.requests", aggregation: "sum", time_range: "24h", group_by: ["1h"] },
+  query: { source: "metrics", metric: "api.requests", aggregation: "sum", time_range: "24h", group_by: [ "1h" ] },
   display: { type: "area", color: "#3B82F6", fill: true },
   position: { x: 0, y: 2, w: 6, h: 3 }
 )
@@ -304,7 +305,7 @@ Widget.create!(
   flux_dashboard: overview,
   title: "Events by Type",
   widget_type: "bar",
-  query: { source: "events", aggregation: "count", group_by: ["name"], time_range: "24h", limit: 10 },
+  query: { source: "events", aggregation: "count", group_by: [ "name" ], time_range: "24h", limit: 10 },
   display: { orientation: "horizontal", color: "#6366F1" },
   position: { x: 0, y: 5, w: 4, h: 3 }
 )
@@ -314,8 +315,8 @@ Widget.create!(
   flux_dashboard: overview,
   title: "Traffic Sources",
   widget_type: "pie",
-  query: { source: "events", event: "page.view", aggregation: "count", group_by: ["properties.referrer"], time_range: "24h" },
-  display: { colors: ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"] },
+  query: { source: "events", event: "page.view", aggregation: "count", group_by: [ "properties.referrer" ], time_range: "24h" },
+  display: { colors: [ "#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6" ] },
   position: { x: 4, y: 5, w: 4, h: 3 }
 )
 
@@ -324,7 +325,7 @@ Widget.create!(
   flux_dashboard: overview,
   title: "Recent Errors",
   widget_type: "table",
-  query: { source: "events", event: "error.occurred", columns: ["timestamp", "properties.type", "properties.endpoint"], limit: 10 },
+  query: { source: "events", event: "error.occurred", columns: [ "timestamp", "properties.type", "properties.endpoint" ], limit: 10 },
   display: { compact: true },
   position: { x: 8, y: 5, w: 4, h: 3 }
 )
@@ -334,7 +335,7 @@ Widget.create!(
   flux_dashboard: overview,
   title: "Top Pages",
   widget_type: "list",
-  query: { source: "events", event: "page.view", aggregation: "count", group_by: ["properties.page"], limit: 5, time_range: "24h" },
+  query: { source: "events", event: "page.view", aggregation: "count", group_by: [ "properties.page" ], limit: 5, time_range: "24h" },
   display: { show_counts: true },
   position: { x: 0, y: 8, w: 4, h: 2 }
 )
@@ -389,7 +390,7 @@ Widget.create!(
   flux_dashboard: performance,
   title: "Response Time by Endpoint",
   widget_type: "graph",
-  query: { source: "metrics", metric: "response_time", aggregation: "p95", group_by: ["tags.endpoint"], time_range: "24h" },
+  query: { source: "metrics", metric: "response_time", aggregation: "p95", group_by: [ "tags.endpoint" ], time_range: "24h" },
   display: { type: "line" },
   position: { x: 0, y: 2, w: 8, h: 4 }
 )
@@ -398,7 +399,7 @@ Widget.create!(
   flux_dashboard: performance,
   title: "Slowest Endpoints",
   widget_type: "bar",
-  query: { source: "metrics", metric: "response_time", aggregation: "p95", group_by: ["tags.endpoint"], time_range: "1h" },
+  query: { source: "metrics", metric: "response_time", aggregation: "p95", group_by: [ "tags.endpoint" ], time_range: "1h" },
   display: { orientation: "horizontal", color: "#EF4444" },
   position: { x: 8, y: 2, w: 4, h: 4 }
 )
@@ -407,7 +408,7 @@ Widget.create!(
   flux_dashboard: performance,
   title: "Memory & CPU",
   widget_type: "graph",
-  query: { source: "metrics", metrics: ["memory.usage", "cpu.utilization"], time_range: "24h" },
+  query: { source: "metrics", metrics: [ "memory.usage", "cpu.utilization" ], time_range: "24h" },
   display: { type: "line", dual_axis: true },
   position: { x: 0, y: 6, w: 12, h: 3 }
 )
@@ -462,7 +463,7 @@ Widget.create!(
   flux_dashboard: business,
   title: "Revenue Over Time",
   widget_type: "graph",
-  query: { source: "events", event: "order.completed", aggregation: "sum", field: "properties.amount", time_range: "7d", group_by: ["1d"] },
+  query: { source: "events", event: "order.completed", aggregation: "sum", field: "properties.amount", time_range: "7d", group_by: [ "1d" ] },
   display: { type: "bar", color: "#10B981" },
   position: { x: 0, y: 2, w: 6, h: 3 }
 )
@@ -471,7 +472,7 @@ Widget.create!(
   flux_dashboard: business,
   title: "Signups by Source",
   widget_type: "pie",
-  query: { source: "events", event: "user.signup", aggregation: "count", group_by: ["properties.source"], time_range: "7d" },
+  query: { source: "events", event: "user.signup", aggregation: "count", group_by: [ "properties.source" ], time_range: "7d" },
   display: { donut: true },
   position: { x: 6, y: 2, w: 3, h: 3 }
 )
@@ -480,7 +481,7 @@ Widget.create!(
   flux_dashboard: business,
   title: "Plans Distribution",
   widget_type: "pie",
-  query: { source: "events", event: "user.signup", aggregation: "count", group_by: ["properties.plan"], time_range: "7d" },
+  query: { source: "events", event: "user.signup", aggregation: "count", group_by: [ "properties.plan" ], time_range: "7d" },
   display: { donut: true },
   position: { x: 9, y: 2, w: 3, h: 3 }
 )
@@ -489,7 +490,7 @@ Widget.create!(
   flux_dashboard: business,
   title: "Recent Orders",
   widget_type: "table",
-  query: { source: "events", event: "order.completed", columns: ["timestamp", "user_id", "properties.amount", "properties.payment_method"], limit: 10 },
+  query: { source: "events", event: "order.completed", columns: [ "timestamp", "user_id", "properties.amount", "properties.payment_method" ], limit: 10 },
   display: {},
   position: { x: 0, y: 5, w: 12, h: 3 }
 )
@@ -544,7 +545,7 @@ Widget.create!(
   flux_dashboard: infrastructure,
   title: "System Resources",
   widget_type: "graph",
-  query: { source: "metrics", metrics: ["cpu.utilization", "memory.usage"], time_range: "6h" },
+  query: { source: "metrics", metrics: [ "cpu.utilization", "memory.usage" ], time_range: "6h" },
   display: { type: "area", stacked: false },
   position: { x: 0, y: 2, w: 12, h: 3 }
 )
@@ -595,7 +596,7 @@ anomalies_data = [
     actual_value: 12.0,
     deviation_percent: 500.0,
     detected_at: 4.hours.ago,
-    context: { error_types: ["TimeoutError", "ValidationError"] },
+    context: { error_types: [ "TimeoutError", "ValidationError" ] },
     acknowledged: true
   },
   {

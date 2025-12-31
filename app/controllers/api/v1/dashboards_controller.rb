@@ -3,7 +3,7 @@
 module Api
   module V1
     class DashboardsController < BaseController
-      before_action :set_dashboard, only: [:show, :update, :destroy]
+      before_action :set_dashboard, only: [ :show, :update, :destroy ]
 
       def index
         dashboards = current_project.flux_dashboards.default_first

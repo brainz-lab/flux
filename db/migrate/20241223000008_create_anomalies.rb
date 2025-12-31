@@ -22,10 +22,10 @@ class CreateAnomalies < ActiveRecord::Migration[8.0]
 
       t.timestamps
 
-      t.index [:project_id, :detected_at]
-      t.index [:project_id, :source_name]
-      t.index [:project_id, :severity]
-      t.index [:project_id, :acknowledged]
+      t.index [ :project_id, :detected_at ]
+      t.index [ :project_id, :source_name ]
+      t.index [ :project_id, :severity ]
+      t.index [ :project_id, :acknowledged ]
     end
   end
 end

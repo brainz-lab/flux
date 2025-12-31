@@ -110,12 +110,12 @@ module Api
       # Signal integration: Query metrics with aggregation for alerting
       def signal_query
         metric_name = params[:name]
-        aggregation = params[:aggregation] || 'avg'
-        window = parse_signal_window(params[:window] || '5m')
-        query_filters = JSON.parse(params[:query] || '{}')
+        aggregation = params[:aggregation] || "avg"
+        window = parse_signal_window(params[:window] || "5m")
+        query_filters = JSON.parse(params[:query] || "{}")
 
         scope = MetricPoint.where(project: current_project, metric_name: metric_name)
-                           .where('timestamp >= ?', window.ago)
+                           .where("timestamp >= ?", window.ago)
 
         # Apply tag filters from query
         query_filters.each do |key, value|
@@ -123,18 +123,18 @@ module Api
         end
 
         value = case aggregation
-                when 'avg' then scope.average(:value)&.round(2)
-                when 'sum' then scope.sum(:value)&.round(2)
-                when 'count' then scope.count
-                when 'min' then scope.minimum(:value)
-                when 'max' then scope.maximum(:value)
-                when 'p95'
+        when "avg" then scope.average(:value)&.round(2)
+        when "sum" then scope.sum(:value)&.round(2)
+        when "count" then scope.count
+        when "min" then scope.minimum(:value)
+        when "max" then scope.maximum(:value)
+        when "p95"
                   values = scope.pluck(:value).compact.sort
                   index = (values.length * 0.95).ceil - 1
                   values[index] || 0
-                else
+        else
                   scope.average(:value)&.round(2)
-                end
+        end
 
         render json: { value: value, name: metric_name, window: params[:window] }
       end
@@ -142,10 +142,10 @@ module Api
       # Signal integration: Get baseline for anomaly detection
       def baseline
         metric_name = params[:name]
-        window = parse_signal_window(params[:window] || '24h')
+        window = parse_signal_window(params[:window] || "24h")
 
         scope = MetricPoint.where(project: current_project, metric_name: metric_name)
-                           .where('timestamp >= ?', window.ago)
+                           .where("timestamp >= ?", window.ago)
 
         # Get hourly averages for the baseline window
         hourly_values = scope.group("date_trunc('hour', timestamp)")
@@ -160,14 +160,14 @@ module Api
           variance = hourly_values.map { |v| (v - mean)**2 }.sum / hourly_values.size
           stddev = Math.sqrt(variance)
 
-          render json: { mean: mean.round(2), stddev: [stddev, 1].max.round(2) }
+          render json: { mean: mean.round(2), stddev: [ stddev, 1 ].max.round(2) }
         end
       end
 
       # Signal integration: Get last metric point for absence detection
       def last
         metric_name = params[:name]
-        query_filters = JSON.parse(params[:query] || '{}')
+        query_filters = JSON.parse(params[:query] || "{}")
 
         scope = MetricPoint.where(project: current_project, metric_name: metric_name)
 
@@ -195,9 +195,9 @@ module Api
 
         value = match[1].to_i
         case match[2]
-        when 'm' then value.minutes
-        when 'h' then value.hours
-        when 'd' then value.days
+        when "m" then value.minutes
+        when "h" then value.hours
+        when "d" then value.days
         else 5.minutes
         end
       end

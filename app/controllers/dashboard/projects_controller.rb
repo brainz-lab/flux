@@ -3,7 +3,7 @@
 module Dashboard
   class ProjectsController < ApplicationController
     before_action :authenticate_via_sso!
-    before_action :set_project, only: [:show, :edit, :update, :settings]
+    before_action :set_project, only: [ :show, :edit, :update, :settings ]
 
     layout "dashboard"
 

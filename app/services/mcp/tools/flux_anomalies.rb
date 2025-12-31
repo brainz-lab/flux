@@ -13,7 +13,7 @@ module Mcp
           },
           severity: {
             type: "string",
-            enum: ["info", "warning", "critical"],
+            enum: [ "info", "warning", "critical" ],
             description: "Filter by severity level"
           },
           unacknowledged: {

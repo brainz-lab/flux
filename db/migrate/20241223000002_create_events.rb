@@ -24,10 +24,10 @@ class CreateEvents < ActiveRecord::Migration[8.0]
     execute "SELECT create_hypertable('events', 'timestamp', if_not_exists => true);"
 
     # Indexes for common queries (must include timestamp for hypertables)
-    add_index :events, [:project_id, :name, :timestamp]
-    add_index :events, [:project_id, :timestamp]
-    add_index :events, [:user_id, :timestamp]
-    add_index :events, [:session_id, :timestamp]
+    add_index :events, [ :project_id, :name, :timestamp ]
+    add_index :events, [ :project_id, :timestamp ]
+    add_index :events, [ :user_id, :timestamp ]
+    add_index :events, [ :session_id, :timestamp ]
 
     # GIN index for JSONB properties
     execute "CREATE INDEX idx_events_properties ON events USING GIN (properties jsonb_path_ops);"

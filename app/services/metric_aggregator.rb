@@ -49,7 +49,7 @@ class MetricAggregator
 
     AggregatedMetric.upsert(
       attrs,
-      unique_by: [:project_id, :metric_name, :bucket_size, :bucket_time]
+      unique_by: [ :project_id, :metric_name, :bucket_size, :bucket_time ]
     )
   end
 

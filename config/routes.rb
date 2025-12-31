@@ -51,19 +51,19 @@ Rails.application.routes.draw do
   namespace :dashboard do
     root to: "projects#index"
 
-    resources :projects, only: [:index, :show, :new, :create] do
+    resources :projects, only: [ :index, :show, :new, :create ] do
       member do
         get :settings
       end
 
       # Nested under project
       get "/", to: "overview#index", as: :overview
-      resources :events, only: [:index, :show]
-      resources :metrics, only: [:index, :show]
+      resources :events, only: [ :index, :show ]
+      resources :metrics, only: [ :index, :show ]
       resources :dashboards do
         resources :widgets
       end
-      resources :anomalies, only: [:index, :show] do
+      resources :anomalies, only: [ :index, :show ] do
         member do
           post :acknowledge
         end

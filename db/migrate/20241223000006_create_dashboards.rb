@@ -14,8 +14,8 @@ class CreateDashboards < ActiveRecord::Migration[8.0]
 
       t.timestamps
 
-      t.index [:project_id, :slug], unique: true
-      t.index [:project_id, :is_default]
+      t.index [ :project_id, :slug ], unique: true
+      t.index [ :project_id, :is_default ]
     end
   end
 end

@@ -24,7 +24,7 @@ module Mcp
             description: "Optional user identifier"
           }
         },
-        required: ["name"]
+        required: [ "name" ]
       }.freeze
 
       def call(args)
