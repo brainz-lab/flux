@@ -40,7 +40,7 @@ module Api
           }
         end
 
-        Event.insert_all(records)
+        bulk_insert_events(records)
         current_project.increment_events_count!(records.size)
 
         render_created(ingested: records.size)
@@ -121,6 +121,35 @@ module Api
         # Only detect for production or if explicitly enabled
         current_project.environment == "production" ||
           current_project.settings["anomaly_detection_enabled"]
+      end
+
+      # Raw SQL insert for events - works with TimescaleDB hypertables
+      def bulk_insert_events(records)
+        return if records.empty?
+
+        conn = ActiveRecord::Base.connection
+        columns = %w[id project_id name timestamp properties tags user_id session_id value environment service host created_at]
+
+        values = records.map do |record|
+          [
+            conn.quote(record[:id]),
+            conn.quote(record[:project_id]),
+            conn.quote(record[:name]),
+            conn.quote(record[:timestamp]),
+            conn.quote(record[:properties].to_json),
+            conn.quote(record[:tags].to_json),
+            conn.quote(record[:user_id]),
+            conn.quote(record[:session_id]),
+            record[:value].nil? ? "NULL" : record[:value],
+            conn.quote(record[:environment]),
+            conn.quote(record[:service]),
+            conn.quote(record[:host]),
+            conn.quote(record[:created_at])
+          ].join(", ")
+        end
+
+        sql = "INSERT INTO events (#{columns.join(', ')}) VALUES #{values.map { |v| "(#{v})" }.join(', ')}"
+        conn.execute(sql)
       end
     end
   end

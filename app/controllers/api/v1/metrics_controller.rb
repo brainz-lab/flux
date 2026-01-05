@@ -36,7 +36,7 @@ module Api
           }
         end
 
-        MetricPoint.insert_all(records)
+        bulk_insert_metric_points(records)
         current_project.increment_metrics_count!(records.size)
 
         render_created(ingested: records.size)
@@ -263,6 +263,27 @@ module Api
           d.unit = params[:unit]
           d.description = params[:description]
         end
+      end
+
+      # Raw SQL insert for metric points - works with TimescaleDB hypertables
+      def bulk_insert_metric_points(records)
+        return if records.empty?
+
+        conn = ActiveRecord::Base.connection
+        columns = %w[project_id metric_name timestamp value tags]
+
+        values = records.map do |record|
+          [
+            conn.quote(record[:project_id]),
+            conn.quote(record[:metric_name]),
+            conn.quote(record[:timestamp]),
+            record[:value].nil? ? "NULL" : record[:value],
+            conn.quote(record[:tags].to_json)
+          ].join(", ")
+        end
+
+        sql = "INSERT INTO metric_points (#{columns.join(', ')}) VALUES #{values.map { |v| "(#{v})" }.join(', ')}"
+        conn.execute(sql)
       end
     end
   end
