@@ -4,6 +4,7 @@ module Dashboard
   class ProjectsController < ApplicationController
     before_action :authenticate_via_sso!
     before_action :set_project, only: [ :show, :edit, :update, :settings ]
+    before_action :redirect_to_platform_in_production, only: [ :new, :create ]
 
     layout "dashboard"
 
@@ -64,6 +65,13 @@ module Dashboard
 
     def project_params
       params.require(:project).permit(:name, :description, :environment, :retention_days)
+    end
+
+    def redirect_to_platform_in_production
+      return unless Rails.env.production?
+
+      platform_url = ENV.fetch("BRAINZLAB_PLATFORM_EXTERNAL_URL", "https://platform.brainzlab.ai")
+      redirect_to dashboard_projects_path, alert: "Projects are managed in Platform. Visit #{platform_url} to create new projects."
     end
   end
 end

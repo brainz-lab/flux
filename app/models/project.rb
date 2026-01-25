@@ -15,7 +15,8 @@ class Project < ApplicationRecord
   before_validation :generate_keys, on: :create
   before_validation :generate_slug, on: :create
 
-  scope :active, -> { where.not(api_key: nil) }
+  scope :active, -> { where(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
 
   # Find or create a project for a Platform project
   def self.find_or_create_for_platform!(platform_project_id:, name: nil, environment: "production")

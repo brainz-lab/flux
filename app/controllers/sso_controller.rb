@@ -12,8 +12,8 @@ class SsoController < ApplicationController
       session[:platform_project_id] = project_data["project_id"]
       session[:platform_user_id] = project_data["user_id"]
 
-      # Ensure local project exists
-      find_or_create_project(project_data)
+      # Sync all user's projects from Platform
+      sync_projects_from_platform(token)
 
       redirect_to params[:return_to] || dashboard_root_path, allow_other_host: true
     else
@@ -31,7 +31,6 @@ class SsoController < ApplicationController
   private
 
   def validate_sso_token(token)
-    platform_url = ENV.fetch("BRAINZLAB_PLATFORM_URL", "http://platform:3000")
     uri = URI.parse("#{platform_url}/api/v1/sso/validate")
 
     http = Net::HTTP.new(uri.host, uri.port)
@@ -53,11 +52,55 @@ class SsoController < ApplicationController
     nil
   end
 
-  def find_or_create_project(data)
-    Project.find_or_create_by(platform_project_id: data["project_id"]) do |p|
-      p.name = data["project_name"] || "Project"
-      p.slug = data["project_slug"] || data["project_id"]
-      p.environment = data["environment"] || "production"
+  def sync_projects_from_platform(sso_token)
+    projects_data = fetch_user_projects(sso_token)
+    return unless projects_data
+
+    platform_ids = projects_data.map { |d| d["id"].to_s }
+
+    projects_data.each do |data|
+      project = Project.find_or_initialize_by(platform_project_id: data["id"].to_s)
+      project.name = data["name"]
+      project.slug = data["slug"]
+      project.environment = data["environment"] || "production"
+      project.archived_at = nil
+      project.save!
     end
+
+    Project.where.not(platform_project_id: [nil, ""])
+           .where.not(platform_project_id: platform_ids)
+           .where(archived_at: nil)
+           .update_all(archived_at: Time.current)
+
+    Rails.logger.info("[SSO] Synced #{projects_data.count} projects from Platform")
+  rescue => e
+    Rails.logger.error("[SSO] Project sync failed: #{e.message}")
+  end
+
+  def fetch_user_projects(sso_token)
+    uri = URI("#{platform_url}/api/v1/user/projects")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = uri.scheme == "https"
+    http.open_timeout = 5
+    http.read_timeout = 10
+
+    request = Net::HTTP::Get.new(uri.path)
+    request["Accept"] = "application/json"
+    request["X-SSO-Token"] = sso_token
+
+    response = http.request(request)
+
+    if response.code == "200"
+      JSON.parse(response.body)["projects"]
+    else
+      nil
+    end
+  rescue => e
+    Rails.logger.error("[SSO] fetch_user_projects failed: #{e.message}")
+    nil
+  end
+
+  def platform_url
+    ENV.fetch("BRAINZLAB_PLATFORM_URL", "http://platform:3000")
   end
 end
