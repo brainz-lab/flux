@@ -12,6 +12,7 @@ RUN apt-get update -qq && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 ENV RAILS_ENV="production" \
+    BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development" \
     LD_PRELOAD="/usr/local/lib/libjemalloc.so"
@@ -27,14 +28,13 @@ RUN apt-get update -qq && \
 
 COPY Gemfile Gemfile.lock ./
 
+# Install gems - frozen=false allows resolution, DEPLOYMENT=1 ensures gem (not path) sources
 RUN bundle config set frozen false && \
     bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
 COPY . .
-
-RUN ln -s "$(bundle show brainzlab-ui)" /brainzlab-ui || true
 
 RUN bundle exec bootsnap precompile app/ lib/
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
