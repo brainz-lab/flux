@@ -1,4 +1,4 @@
-name: Docker
+name: Build and Push Docker Image
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
 
 env:
   GHCR_IMAGE: ghcr.io/brainz-lab/flux
+  DO_IMAGE: registry.digitalocean.com/brainz/flux
 
 jobs:
   build-and-push:
@@ -17,8 +18,8 @@ jobs:
       packages: write
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -33,11 +34,20 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Login to DigitalOcean Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: registry.digitalocean.com
+          username: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          password: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.GHCR_IMAGE }}
+          images: |
+            ${{ env.GHCR_IMAGE }}
+            ${{ env.DO_IMAGE }}
           tags: |
             type=ref,event=branch
             type=semver,pattern={{version}}
