@@ -36,6 +36,8 @@ RUN bundle config set frozen false && \
 
 COPY . .
 
+RUN ln -s "$(bundle show brainzlab-ui)" /brainzlab-ui || true
+
 RUN bundle exec bootsnap precompile app/ lib/
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
