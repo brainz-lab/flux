@@ -25,15 +25,15 @@
     }
   </style>
 
-  <%# Prevent flash of wrong theme %>
+  <%# Prevent flash of wrong theme on page load %>
   <script>
     (function() {
-      const stored = localStorage.getItem('flux-theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const theme = stored || (prefersDark ? 'dark' : 'light');
-      if (theme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
+      const savedTheme = localStorage.getItem('brainzlab-theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
         document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.add('light');
       }
     })();
   </script>
