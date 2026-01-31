@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en" class="h-full" data-controller="dark-mode">
 <head>
   <title>Flux - <%= content_for(:title) || "Custom Metrics" %></title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -12,6 +12,7 @@
 
   <%# BrainzLab UI Design System %>
   <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
 
   <style>
     :root {
@@ -24,6 +25,19 @@
     }
   </style>
 
+  <%# Prevent flash of wrong theme %>
+  <script>
+    (function() {
+      const stored = localStorage.getItem('flux-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = stored || (prefersDark ? 'dark' : 'light');
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
   <%# Google Analytics - only in production %>
   <% if Rails.env.production? %>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CXHFR6PC8W"></script>
@@ -35,30 +49,42 @@
     </script>
   <% end %>
 </head>
-<body class="h-full antialiased" style="background: var(--color-cream-50);">
+<body class="h-full antialiased flux-bg">
   <div class="flex h-full">
     <!-- Sidebar -->
-    <aside class="w-64 flex flex-col" style="background: #fff; border-right: 1px solid var(--color-cream-200);">
-      <div class="p-5" style="border-bottom: 1px solid var(--color-cream-200);">
-        <%= link_to dashboard_root_path, class: "flex items-center gap-2.5" do %>
-          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: var(--color-flux);">
-            <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M6 18V10M12 18V6M18 18V14" stroke-linecap="round"/>
+    <aside class="w-64 flex flex-col flux-sidebar">
+      <div class="p-5 flux-border" style="border-bottom-width: 1px;">
+        <div class="flex items-center justify-between">
+          <%= link_to dashboard_root_path, class: "flex items-center gap-2.5" do %>
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: var(--flux-accent);">
+              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M6 18V10M12 18V6M18 18V14" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="font-semibold flux-text">Flux</span>
+          <% end %>
+          <button type="button"
+                  class="dark-mode-toggle"
+                  data-action="click->dark-mode#toggle"
+                  data-dark-mode-target="icon"
+                  title="Toggle dark mode">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
             </svg>
-          </div>
-          <span class="font-semibold" style="color: var(--color-ink-950);">Flux</span>
-        <% end %>
+          </button>
+        </div>
       </div>
 
       <% if @project&.persisted? %>
         <!-- Project Selector -->
-        <div class="px-4 py-3" style="border-bottom: 1px solid var(--color-cream-200);">
-          <%= link_to dashboard_projects_path, class: "flex items-center gap-2 px-2 py-1.5 rounded-lg transition", style: "color: var(--color-ink-700);" do %>
-            <div class="w-6 h-6 rounded flex items-center justify-center text-xs font-semibold" style="background: rgba(249, 115, 22, 0.15); color: var(--color-flux);">
+        <div class="px-4 py-3 border-b flux-border">
+          <%= link_to dashboard_projects_path, class: "flex items-center gap-2 px-2 py-1.5 rounded-lg transition flux-text-secondary hover:flux-text" do %>
+            <div class="w-6 h-6 rounded flex items-center justify-center text-xs font-semibold" style="background: var(--flux-accent-bg-muted); color: var(--flux-accent);">
               <%= @project.name.first.upcase %>
             </div>
             <span class="flex-1 text-sm font-medium truncate"><%= @project.name %></span>
-            <svg class="w-4 h-4" style="color: var(--color-ink-400);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 flux-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/>
             </svg>
           <% end %>
@@ -112,20 +138,20 @@
         <% end %>
       <% else %>
         <nav class="p-4 flex-1">
-          <p class="px-3 text-xs font-medium uppercase tracking-wider mb-3" style="color: var(--color-ink-400);">Select a project</p>
+          <p class="px-3 text-xs font-medium uppercase tracking-wider mb-3 flux-text-muted">Select a project</p>
         </nav>
       <% end %>
 
       <!-- User Menu -->
       <% if defined?(current_user) && current_user %>
-        <div class="p-4" style="border-top: 1px solid var(--color-cream-200);">
+        <div class="p-4 border-t flux-border">
           <div class="flex items-center gap-3">
             <div class="avatar avatar-md avatar-primary">
               <%= current_user.name&.first&.upcase || current_user.email.first.upcase %>
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium truncate" style="color: var(--color-ink-900);"><%= current_user.name || current_user.email.split('@').first %></p>
-              <p class="text-xs truncate" style="color: var(--color-ink-500);"><%= current_user.email %></p>
+              <p class="text-sm font-medium truncate flux-text"><%= current_user.name || current_user.email.split('@').first %></p>
+              <p class="text-xs truncate flux-text-muted"><%= current_user.email %></p>
             </div>
           </div>
         </div>
@@ -133,9 +159,9 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 overflow-auto">
+    <main class="flex-1 overflow-auto flux-bg">
       <% if notice %>
-        <div class="m-8 mb-0 alert alert-success">
+        <div class="m-8 mb-0 alert flux-badge-success">
           <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -143,7 +169,7 @@
         </div>
       <% end %>
       <% if alert %>
-        <div class="m-8 mb-0 alert alert-error">
+        <div class="m-8 mb-0 alert flux-alert-error">
           <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
           </svg>

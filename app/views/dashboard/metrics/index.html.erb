@@ -3,24 +3,24 @@
 <div class="space-y-8">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-[22px] font-semibold tracking-tight" style="color: #1A1A1A;">Metrics</h1>
-      <p class="mt-1 text-[13px]" style="color: #8B8780;">Metric definitions and time series</p>
+      <h1 class="text-[22px] font-semibold tracking-tight flux-text">Metrics</h1>
+      <p class="mt-1 text-[13px] flux-text-muted">Metric definitions and time series</p>
     </div>
   </div>
 
   <% if @metrics.any? %>
     <div class="space-y-3">
       <% @metrics.each do |metric| %>
-        <div class="px-5 py-4 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+        <div class="px-5 py-4 rounded-xl flux-card">
           <div class="flex items-center justify-between">
             <div class="space-y-1">
-              <h3 class="text-[15px] font-medium" style="color: #1A1A1A;"><%= metric.name %></h3>
-              <p class="text-[13px]" style="color: #8B8780;">
+              <h3 class="text-[15px] font-medium flux-text"><%= metric.name %></h3>
+              <p class="text-[13px] flux-text-muted">
                 <%= metric.metric_type.capitalize %> · <%= metric.unit || 'no unit' %>
               </p>
             </div>
             <div class="flex items-center gap-4">
-              <span class="px-2 py-0.5 text-[11px] font-medium rounded-full" style="background: #F0EFED; color: #6B6760;">
+              <span class="px-2 py-0.5 text-[11px] font-medium rounded-full flux-badge">
                 <%= metric.metric_type %>
               </span>
             </div>
@@ -29,11 +29,11 @@
       <% end %>
     </div>
   <% else %>
-    <div class="text-center py-16 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
+    <div class="text-center py-16 rounded-xl flux-card">
       <div class="space-y-3">
-        <p class="text-[15px]" style="color: #6B6760;">No metrics defined yet</p>
-        <p class="text-[13px]" style="color: #8B8780;">Track metrics using the SDK:</p>
-        <pre class="mt-3 mx-auto max-w-md p-4 rounded-lg text-[13px] text-left" style="background: #1A1A1A; color: #E8E5E0;"><code>BrainzLab::Flux.gauge("users.online", 234)
+        <p class="text-[15px] flux-text-secondary">No metrics defined yet</p>
+        <p class="text-[13px] flux-text-muted">Track metrics using the SDK:</p>
+        <pre class="mt-3 mx-auto max-w-md p-4 rounded-lg text-[13px] text-left flux-code"><code>BrainzLab::Flux.gauge("users.online", 234)
 BrainzLab::Flux.increment("api.requests")</code></pre>
       </div>
     </div>

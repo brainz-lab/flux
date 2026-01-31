@@ -2,60 +2,60 @@
 
 <div class="space-y-8">
   <div>
-    <h1 class="text-[22px] font-semibold tracking-tight" style="color: #1A1A1A;">Setup</h1>
-    <p class="mt-1 text-[13px]" style="color: #8B8780;">Integrate Flux into your Rails application</p>
+    <h1 class="text-[22px] font-semibold tracking-tight flux-text">Setup</h1>
+    <p class="mt-1 text-[13px] flux-text-muted">Integrate Flux into your Rails application</p>
   </div>
 
   <div class="space-y-6">
-    <div class="px-6 py-5 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
-      <h2 class="text-[15px] font-medium mb-4" style="color: #1A1A1A;">1. Install the SDK</h2>
-      <p class="text-[13px] mb-3" style="color: #6B6760;">Add the BrainzLab SDK to your Gemfile:</p>
-      <pre class="p-4 rounded-lg text-[13px] overflow-x-auto" style="background: #1A1A1A; color: #E8E5E0;"><code>gem "brainzlab-sdk"</code></pre>
+    <div class="px-6 py-5 rounded-xl flux-card">
+      <h2 class="text-[15px] font-medium mb-4 flux-text">1. Install the SDK</h2>
+      <p class="text-[13px] mb-3 flux-text-secondary">Add the BrainzLab SDK to your Gemfile:</p>
+      <pre class="p-4 rounded-lg text-[13px] overflow-x-auto flux-code"><code>gem "brainzlab-sdk"</code></pre>
     </div>
 
-    <div class="px-6 py-5 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
-      <h2 class="text-[15px] font-medium mb-4" style="color: #1A1A1A;">2. Configure your API keys</h2>
-      <p class="text-[13px] mb-3" style="color: #6B6760;">Add these environment variables to your application:</p>
-      <pre class="p-4 rounded-lg text-[13px] overflow-x-auto" style="background: #1A1A1A; color: #E8E5E0;"><code>FLUX_URL=<%= request.base_url %>
+    <div class="px-6 py-5 rounded-xl flux-card">
+      <h2 class="text-[15px] font-medium mb-4 flux-text">2. Configure your API keys</h2>
+      <p class="text-[13px] mb-3 flux-text-secondary">Add these environment variables to your application:</p>
+      <pre class="p-4 rounded-lg text-[13px] overflow-x-auto flux-code"><code>FLUX_URL=<%= request.base_url %>
 FLUX_API_KEY=<%= @project.api_key %>
 FLUX_INGEST_KEY=<%= @project.ingest_key %></code></pre>
     </div>
 
-    <div class="px-6 py-5 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
-      <h2 class="text-[15px] font-medium mb-4" style="color: #1A1A1A;">3. Track Events</h2>
-      <p class="text-[13px] mb-3" style="color: #6B6760;">Track custom events anywhere in your application:</p>
-      <pre class="p-4 rounded-lg text-[13px] overflow-x-auto" style="background: #1A1A1A; color: #E8E5E0;"><code># Track a custom event
-BrainzLab::Flux.track("user.signup", {
+    <div class="px-6 py-5 rounded-xl flux-card">
+      <h2 class="text-[15px] font-medium mb-4 flux-text">3. Track Events</h2>
+      <p class="text-[13px] mb-3 flux-text-secondary">Track custom events anywhere in your application:</p>
+      <pre class="p-4 rounded-lg text-[13px] overflow-x-auto flux-code"><code><span class="flux-code-comment"># Track a custom event</span>
+BrainzLab::Flux.track(<span class="flux-text-accent">"user.signup"</span>, {
   user_id: user.id,
-  plan: "pro",
-  source: "google_ads"
+  plan: <span class="flux-text-accent">"pro"</span>,
+  source: <span class="flux-text-accent">"google_ads"</span>
 })
 
-# Track with a value
-BrainzLab::Flux.track("order.completed", {
+<span class="flux-code-comment"># Track with a value</span>
+BrainzLab::Flux.track(<span class="flux-text-accent">"order.completed"</span>, {
   order_id: order.id,
   value: order.total
 })</code></pre>
     </div>
 
-    <div class="px-6 py-5 rounded-xl" style="background: #FFFFFE; border: 1px solid #E8E5E0;">
-      <h2 class="text-[15px] font-medium mb-4" style="color: #1A1A1A;">4. Track Metrics</h2>
-      <p class="text-[13px] mb-3" style="color: #6B6760;">Record metrics for monitoring and dashboards:</p>
-      <pre class="p-4 rounded-lg text-[13px] overflow-x-auto" style="background: #1A1A1A; color: #E8E5E0;"><code># Gauge - current value
-BrainzLab::Flux.gauge("users.online", 234)
+    <div class="px-6 py-5 rounded-xl flux-card">
+      <h2 class="text-[15px] font-medium mb-4 flux-text">4. Track Metrics</h2>
+      <p class="text-[13px] mb-3 flux-text-secondary">Record metrics for monitoring and dashboards:</p>
+      <pre class="p-4 rounded-lg text-[13px] overflow-x-auto flux-code"><code><span class="flux-code-comment"># Gauge - current value</span>
+BrainzLab::Flux.gauge(<span class="flux-text-accent">"users.online"</span>, 234)
 
-# Counter - incrementing values
-BrainzLab::Flux.increment("api.requests")
-BrainzLab::Flux.decrement("queue.depth")
+<span class="flux-code-comment"># Counter - incrementing values</span>
+BrainzLab::Flux.increment(<span class="flux-text-accent">"api.requests"</span>)
+BrainzLab::Flux.decrement(<span class="flux-text-accent">"queue.depth"</span>)
 
-# Distribution - statistical aggregation
-BrainzLab::Flux.distribution("response_time", 145.2)
+<span class="flux-code-comment"># Distribution - statistical aggregation</span>
+BrainzLab::Flux.distribution(<span class="flux-text-accent">"response_time"</span>, 145.2)
 
-# Set - unique counts
-BrainzLab::Flux.set("daily_active_users", user.id)
+<span class="flux-code-comment"># Set - unique counts</span>
+BrainzLab::Flux.set(<span class="flux-text-accent">"daily_active_users"</span>, user.id)
 
-# Time operations
-BrainzLab::Flux.measure("pdf.generate") do
+<span class="flux-code-comment"># Time operations</span>
+BrainzLab::Flux.measure(<span class="flux-text-accent">"pdf.generate"</span>) do
   generate_pdf(document)
 end</code></pre>
     </div>
