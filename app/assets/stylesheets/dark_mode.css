@@ -1,0 +1,303 @@
+/*
+ * Flux Dark Mode Support
+ * Using brainzlab-ui design system tokens
+ */
+
+:root {
+  /* Light theme (default) */
+  --flux-bg: #FAF9F7;
+  --flux-bg-elevated: #FFFFFE;
+  --flux-bg-subtle: #F0EFED;
+  --flux-bg-muted: #FAF9F7;
+
+  --flux-text: #1A1A1A;
+  --flux-text-secondary: #6B6760;
+  --flux-text-muted: #8B8780;
+  --flux-text-faint: #A8A49E;
+  --flux-text-disabled: #C4C1BC;
+
+  --flux-border: #E8E5E0;
+  --flux-border-hover: #D0CEC9;
+
+  --flux-accent: #F97316;
+  --flux-accent-dark: #EA580C;
+  --flux-accent-light: #FB923C;
+  --flux-accent-bg: #FFEDD5;
+  --flux-accent-bg-subtle: rgba(249, 115, 22, 0.1);
+  --flux-accent-bg-muted: rgba(249, 115, 22, 0.15);
+
+  /* Semantic colors */
+  --flux-success: #16A34A;
+  --flux-success-bg: #E8F5E9;
+  --flux-warning: #D97706;
+  --flux-warning-bg: #FEF3C7;
+  --flux-error: #DC2626;
+  --flux-error-bg: #FEE2E2;
+  --flux-error-border: #FECACA;
+  --flux-info: #2563EB;
+  --flux-info-bg: #DBEAFE;
+
+  /* Button colors */
+  --flux-btn-primary-bg: #1A1A1A;
+  --flux-btn-primary-text: #FFFFFE;
+  --flux-btn-secondary-bg: #F0EFED;
+  --flux-btn-secondary-text: #6B6760;
+
+  /* Code blocks */
+  --flux-code-bg: #1A1A1A;
+  --flux-code-text: #E8E5E0;
+  --flux-code-comment: #8B8780;
+
+  /* Sidebar */
+  --flux-sidebar-bg: #FFFFFF;
+
+  /* Badge colors */
+  --flux-badge-default-bg: #E3F2FD;
+  --flux-badge-default-text: #1565C0;
+  --flux-badge-success-bg: #E8F5E9;
+  --flux-badge-success-text: #2E7D32;
+}
+
+/* Dark theme */
+[data-theme="dark"],
+.dark {
+  --flux-bg: #121212;
+  --flux-bg-elevated: #1e1e1e;
+  --flux-bg-subtle: #2a2a2a;
+  --flux-bg-muted: #1e1e1e;
+
+  --flux-text: #e8e1d7;
+  --flux-text-secondary: #b8b8b8;
+  --flux-text-muted: #a0a0a0;
+  --flux-text-faint: #888888;
+  --flux-text-disabled: #666666;
+
+  --flux-border: #333333;
+  --flux-border-hover: #444444;
+
+  --flux-accent: #F97316;
+  --flux-accent-dark: #FB923C;
+  --flux-accent-light: #FDBA74;
+  --flux-accent-bg: rgba(249, 115, 22, 0.2);
+  --flux-accent-bg-subtle: rgba(249, 115, 22, 0.1);
+  --flux-accent-bg-muted: rgba(249, 115, 22, 0.15);
+
+  /* Semantic colors - darker variants */
+  --flux-success: #22C55E;
+  --flux-success-bg: rgba(34, 197, 94, 0.15);
+  --flux-warning: #F59E0B;
+  --flux-warning-bg: rgba(245, 158, 11, 0.15);
+  --flux-error: #EF4444;
+  --flux-error-bg: rgba(239, 68, 68, 0.15);
+  --flux-error-border: rgba(239, 68, 68, 0.3);
+  --flux-info: #3B82F6;
+  --flux-info-bg: rgba(59, 130, 246, 0.15);
+
+  /* Button colors */
+  --flux-btn-primary-bg: #e8e1d7;
+  --flux-btn-primary-text: #121212;
+  --flux-btn-secondary-bg: #2a2a2a;
+  --flux-btn-secondary-text: #a0a0a0;
+
+  /* Code blocks */
+  --flux-code-bg: #0d0d0d;
+  --flux-code-text: #e8e1d7;
+  --flux-code-comment: #666666;
+
+  /* Sidebar */
+  --flux-sidebar-bg: #1e1e1e;
+
+  /* Badge colors */
+  --flux-badge-default-bg: rgba(59, 130, 246, 0.2);
+  --flux-badge-default-text: #60A5FA;
+  --flux-badge-success-bg: rgba(34, 197, 94, 0.2);
+  --flux-badge-success-text: #4ADE80;
+}
+
+/* System preference dark mode */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --flux-bg: #121212;
+    --flux-bg-elevated: #1e1e1e;
+    --flux-bg-subtle: #2a2a2a;
+    --flux-bg-muted: #1e1e1e;
+
+    --flux-text: #e8e1d7;
+    --flux-text-secondary: #b8b8b8;
+    --flux-text-muted: #a0a0a0;
+    --flux-text-faint: #888888;
+    --flux-text-disabled: #666666;
+
+    --flux-border: #333333;
+    --flux-border-hover: #444444;
+
+    --flux-accent: #F97316;
+    --flux-accent-dark: #FB923C;
+    --flux-accent-light: #FDBA74;
+    --flux-accent-bg: rgba(249, 115, 22, 0.2);
+    --flux-accent-bg-subtle: rgba(249, 115, 22, 0.1);
+    --flux-accent-bg-muted: rgba(249, 115, 22, 0.15);
+
+    --flux-success: #22C55E;
+    --flux-success-bg: rgba(34, 197, 94, 0.15);
+    --flux-warning: #F59E0B;
+    --flux-warning-bg: rgba(245, 158, 11, 0.15);
+    --flux-error: #EF4444;
+    --flux-error-bg: rgba(239, 68, 68, 0.15);
+    --flux-error-border: rgba(239, 68, 68, 0.3);
+    --flux-info: #3B82F6;
+    --flux-info-bg: rgba(59, 130, 246, 0.15);
+
+    --flux-btn-primary-bg: #e8e1d7;
+    --flux-btn-primary-text: #121212;
+    --flux-btn-secondary-bg: #2a2a2a;
+    --flux-btn-secondary-text: #a0a0a0;
+
+    --flux-code-bg: #0d0d0d;
+    --flux-code-text: #e8e1d7;
+    --flux-code-comment: #666666;
+
+    --flux-sidebar-bg: #1e1e1e;
+
+    --flux-badge-default-bg: rgba(59, 130, 246, 0.2);
+    --flux-badge-default-text: #60A5FA;
+    --flux-badge-success-bg: rgba(34, 197, 94, 0.2);
+    --flux-badge-success-text: #4ADE80;
+  }
+}
+
+/* Utility classes using CSS variables */
+.flux-bg { background-color: var(--flux-bg); }
+.flux-bg-elevated { background-color: var(--flux-bg-elevated); }
+.flux-bg-subtle { background-color: var(--flux-bg-subtle); }
+.flux-bg-muted { background-color: var(--flux-bg-muted); }
+
+.flux-text { color: var(--flux-text); }
+.flux-text-secondary { color: var(--flux-text-secondary); }
+.flux-text-muted { color: var(--flux-text-muted); }
+.flux-text-faint { color: var(--flux-text-faint); }
+.flux-text-disabled { color: var(--flux-text-disabled); }
+.flux-text-accent { color: var(--flux-accent); }
+
+.flux-border { border-color: var(--flux-border); }
+
+.flux-card {
+  background-color: var(--flux-bg-elevated);
+  border: 1px solid var(--flux-border);
+}
+
+.flux-card:hover {
+  border-color: var(--flux-border-hover);
+}
+
+.flux-btn-primary {
+  background-color: var(--flux-btn-primary-bg);
+  color: var(--flux-btn-primary-text);
+}
+
+.flux-btn-secondary {
+  background-color: var(--flux-btn-secondary-bg);
+  color: var(--flux-btn-secondary-text);
+}
+
+.flux-code {
+  background-color: var(--flux-code-bg);
+  color: var(--flux-code-text);
+}
+
+.flux-code-comment {
+  color: var(--flux-code-comment);
+}
+
+/* Form inputs */
+.flux-input {
+  background-color: var(--flux-bg-elevated);
+  border: 1px solid var(--flux-border);
+  color: var(--flux-text);
+}
+
+.flux-input:focus {
+  outline: none;
+  ring: 2px solid var(--flux-text);
+}
+
+.flux-input::placeholder {
+  color: var(--flux-text-muted);
+}
+
+/* Tables */
+.flux-table-header {
+  background-color: var(--flux-bg-muted);
+}
+
+.flux-table-row:hover {
+  background-color: var(--flux-bg-muted);
+}
+
+/* Badges */
+.flux-badge {
+  background-color: var(--flux-bg-subtle);
+  color: var(--flux-text-secondary);
+}
+
+.flux-badge-success {
+  background-color: var(--flux-success-bg);
+  color: var(--flux-success);
+}
+
+.flux-badge-warning {
+  background-color: var(--flux-warning-bg);
+  color: var(--flux-warning);
+}
+
+.flux-badge-error {
+  background-color: var(--flux-error-bg);
+  color: var(--flux-error);
+}
+
+.flux-badge-info {
+  background-color: var(--flux-info-bg);
+  color: var(--flux-info);
+}
+
+/* Alerts */
+.flux-alert-error {
+  background-color: var(--flux-error-bg);
+  border: 1px solid var(--flux-error-border);
+  color: var(--flux-error);
+}
+
+/* Sidebar */
+.flux-sidebar {
+  background-color: var(--flux-sidebar-bg);
+  border-right: 1px solid var(--flux-border);
+}
+
+/* Dark mode toggle button */
+.dark-mode-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background-color: var(--flux-bg-subtle);
+  color: var(--flux-text-muted);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.dark-mode-toggle:hover {
+  background-color: var(--flux-border);
+  color: var(--flux-text);
+}
+
+/* Smooth transition for theme changes */
+body,
+.flux-card,
+.flux-sidebar,
+.flux-input,
+.flux-btn-primary,
+.flux-btn-secondary {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
