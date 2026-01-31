@@ -509,3 +509,314 @@ html.no-transitions * {
     display: none;
   }
 }
+
+/* ============================================
+   FLUX-SPECIFIC UTILITY CLASSES
+   ============================================
+   These classes provide theme-aware styling for the Flux dashboard.
+   They use CSS variables that adapt to light/dark mode automatically.
+*/
+
+/* ----------------------------------------
+   Flux CSS Variables
+   ---------------------------------------- */
+:root {
+  /* Flux accent color (orange) */
+  --flux-accent: #F97316;
+  --flux-accent-dark: #EA580C;
+  --flux-accent-light: #FB923C;
+  --flux-accent-bg: rgba(249, 115, 22, 0.1);
+  --flux-accent-bg-muted: rgba(249, 115, 22, 0.08);
+
+  /* Flux semantic colors - Light */
+  --flux-bg: var(--color-cream-50, #FAF9F7);
+  --flux-surface: #FFFFFF;
+  --flux-surface-alt: var(--color-cream-100, #F4F1EC);
+  --flux-surface-muted: var(--color-cream-50, #FAF9F7);
+
+  --flux-text: var(--color-ink-950, #1a1a1a);
+  --flux-text-secondary: var(--color-ink-600, #655D53);
+  --flux-text-muted: var(--color-ink-500, #7A7165);
+  --flux-text-faint: var(--color-ink-400, #958C80);
+  --flux-text-disabled: var(--color-ink-300, #B5AEA5);
+
+  --flux-border: var(--color-cream-200, #E8E1D7);
+  --flux-border-light: var(--color-cream-100, #F4F1EC);
+
+  --flux-code-bg: #1A1A1A;
+  --flux-code-text: #E8E5E0;
+
+  /* Status colors */
+  --flux-success: #16A34A;
+  --flux-warning: #D97706;
+  --flux-error: #DC2626;
+  --flux-info: #2563EB;
+}
+
+html.dark,
+.dark,
+[data-theme="dark"] {
+  --flux-accent: #F97316;
+  --flux-accent-dark: #FB923C;
+  --flux-accent-light: #FDBA74;
+  --flux-accent-bg: rgba(249, 115, 22, 0.15);
+  --flux-accent-bg-muted: rgba(249, 115, 22, 0.1);
+
+  --flux-bg: var(--color-dark-bg, #121212);
+  --flux-surface: var(--color-dark-surface, #1e1e1e);
+  --flux-surface-alt: var(--color-dark-surface-light, #2a2a2a);
+  --flux-surface-muted: var(--color-dark-surface, #1e1e1e);
+
+  --flux-text: var(--color-dark-text, #e8e1d7);
+  --flux-text-secondary: var(--color-dark-text-muted, #a0a0a0);
+  --flux-text-muted: #888888;
+  --flux-text-faint: #666666;
+  --flux-text-disabled: #555555;
+
+  --flux-border: var(--color-dark-border, #333333);
+  --flux-border-light: #2a2a2a;
+
+  --flux-code-bg: #0d0d0d;
+  --flux-code-text: #e8e1d7;
+
+  /* Status colors - Dark */
+  --flux-success: #22C55E;
+  --flux-warning: #F59E0B;
+  --flux-error: #EF4444;
+  --flux-info: #3B82F6;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not(.light):not([data-theme="light"]) {
+    --flux-accent: #F97316;
+    --flux-accent-dark: #FB923C;
+    --flux-accent-light: #FDBA74;
+    --flux-accent-bg: rgba(249, 115, 22, 0.15);
+    --flux-accent-bg-muted: rgba(249, 115, 22, 0.1);
+
+    --flux-bg: var(--color-dark-bg, #121212);
+    --flux-surface: var(--color-dark-surface, #1e1e1e);
+    --flux-surface-alt: var(--color-dark-surface-light, #2a2a2a);
+    --flux-surface-muted: var(--color-dark-surface, #1e1e1e);
+
+    --flux-text: var(--color-dark-text, #e8e1d7);
+    --flux-text-secondary: var(--color-dark-text-muted, #a0a0a0);
+    --flux-text-muted: #888888;
+    --flux-text-faint: #666666;
+    --flux-text-disabled: #555555;
+
+    --flux-border: var(--color-dark-border, #333333);
+    --flux-border-light: #2a2a2a;
+
+    --flux-code-bg: #0d0d0d;
+    --flux-code-text: #e8e1d7;
+
+    --flux-success: #22C55E;
+    --flux-warning: #F59E0B;
+    --flux-error: #EF4444;
+    --flux-info: #3B82F6;
+  }
+}
+
+/* ----------------------------------------
+   Flux Text Utilities
+   ---------------------------------------- */
+.flux-text {
+  color: var(--flux-text);
+}
+
+.flux-text-secondary {
+  color: var(--flux-text-secondary);
+}
+
+.flux-text-muted {
+  color: var(--flux-text-muted);
+}
+
+.flux-text-faint {
+  color: var(--flux-text-faint);
+}
+
+.flux-text-disabled {
+  color: var(--flux-text-disabled);
+}
+
+.flux-text-accent {
+  color: var(--flux-accent);
+}
+
+/* ----------------------------------------
+   Flux Background Utilities
+   ---------------------------------------- */
+.flux-bg {
+  background-color: var(--flux-bg);
+}
+
+.flux-bg-subtle {
+  background-color: var(--flux-surface-alt);
+}
+
+.flux-bg-muted {
+  background-color: var(--flux-surface-muted);
+}
+
+/* ----------------------------------------
+   Flux Border Utilities
+   ---------------------------------------- */
+.flux-border {
+  border-color: var(--flux-border);
+}
+
+.flux-border-light {
+  border-color: var(--flux-border-light);
+}
+
+/* ----------------------------------------
+   Flux Card Component
+   ---------------------------------------- */
+.flux-card {
+  background-color: var(--flux-surface);
+  border: 1px solid var(--flux-border);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.flux-card:hover {
+  border-color: var(--flux-border);
+}
+
+.hover\:flux-border-hover:hover {
+  border-color: var(--flux-accent);
+}
+
+/* ----------------------------------------
+   Flux Sidebar Component
+   ---------------------------------------- */
+.flux-sidebar {
+  background-color: var(--flux-surface);
+  border-right: 1px solid var(--flux-border);
+}
+
+/* ----------------------------------------
+   Flux Input Component
+   ---------------------------------------- */
+.flux-input {
+  background-color: var(--flux-surface-muted);
+  border: 1px solid var(--flux-border);
+  color: var(--flux-text);
+}
+
+.flux-input::placeholder {
+  color: var(--flux-text-faint);
+}
+
+.flux-input:focus {
+  border-color: var(--flux-accent);
+  background-color: var(--flux-surface);
+  box-shadow: 0 0 0 2px var(--flux-accent-bg);
+}
+
+/* ----------------------------------------
+   Flux Button Components
+   ---------------------------------------- */
+.flux-btn-primary {
+  background-color: var(--flux-text);
+  color: var(--flux-bg);
+}
+
+.flux-btn-primary:hover {
+  opacity: 0.9;
+}
+
+.flux-btn-secondary {
+  background-color: var(--flux-surface-alt);
+  border: 1px solid var(--flux-border);
+  color: var(--flux-text-secondary);
+}
+
+.flux-btn-secondary:hover {
+  background-color: var(--flux-surface-muted);
+  border-color: var(--flux-border);
+}
+
+/* ----------------------------------------
+   Flux Table Components
+   ---------------------------------------- */
+.flux-table-header {
+  background-color: var(--flux-surface-alt);
+  border-bottom: 1px solid var(--flux-border);
+}
+
+.flux-table-row {
+  border-bottom: 1px solid var(--flux-border-light);
+}
+
+.flux-table-row:hover {
+  background-color: var(--flux-surface-muted);
+}
+
+/* ----------------------------------------
+   Flux Code Block
+   ---------------------------------------- */
+.flux-code {
+  background-color: var(--flux-code-bg);
+  color: var(--flux-code-text);
+}
+
+.flux-code-comment {
+  color: #6B7280;
+}
+
+/* ----------------------------------------
+   Flux Badge Components
+   ---------------------------------------- */
+.flux-badge {
+  background-color: var(--flux-surface-alt);
+  color: var(--flux-text-muted);
+}
+
+.flux-badge-success {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: var(--flux-success);
+}
+
+.flux-badge-warning {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: var(--flux-warning);
+}
+
+.flux-badge-error {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--flux-error);
+}
+
+.flux-badge-info {
+  background-color: rgba(59, 130, 246, 0.15);
+  color: var(--flux-info);
+}
+
+/* ----------------------------------------
+   Flux Alert Components
+   ---------------------------------------- */
+.flux-alert-success {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: var(--flux-success);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.flux-alert-warning {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: var(--flux-warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.flux-alert-error {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--flux-error);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.flux-alert-info {
+  background-color: rgba(59, 130, 246, 0.15);
+  color: var(--flux-info);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
