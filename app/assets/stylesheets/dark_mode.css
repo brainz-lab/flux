@@ -146,56 +146,58 @@ html.dark,
    ============================================ */
 @media (prefers-color-scheme: dark) {
   html:not(.light):not([data-theme="light"]) {
-    /* Core backgrounds */
-    --dm-bg: #121212;
-    --dm-surface: #1e1e1e;
-    --dm-surface-alt: #2a2a2a;
-    --dm-surface-hover: #333333;
+    /* Core backgrounds - Terminal-inspired */
+    --dm-bg: #0a0a0a;
+    --dm-surface: #111111;
+    --dm-surface-alt: #161616;
+    --dm-surface-hover: #1c1c1c;
+    --dm-surface-light: #1a1a1a;
 
-    /* Core text */
-    --dm-text: #e8e1d7;
-    --dm-text-secondary: #a0a0a0;
-    --dm-text-muted: #707070;
-    --dm-text-placeholder: #666666;
+    /* Core text - Terminal-inspired */
+    --dm-text: #e4e4e4;
+    --dm-text-secondary: #a3a3a3;
+    --dm-text-muted: #737373;
+    --dm-text-placeholder: #525252;
+    --dm-text-disabled: #404040;
 
-    /* Core borders */
-    --dm-border: #333333;
-    --dm-border-light: #2a2a2a;
+    /* Core borders - Terminal-inspired */
+    --dm-border: #262626;
+    --dm-border-light: #1f1f1f;
 
-    /* Interactive */
-    --dm-input-bg: #2a2a2a;
-    --dm-input-border: #333333;
-    --dm-hover-bg: #2a2a2a;
+    /* Interactive - Terminal-inspired */
+    --dm-input-bg: #161616;
+    --dm-input-border: #262626;
+    --dm-hover-bg: #1c1c1c;
 
-    /* Code blocks */
-    --dm-code-bg: #0d0d0d;
-    --dm-code-text: #e8e1d7;
+    /* Code blocks - Terminal-inspired */
+    --dm-code-bg: #000000;
+    --dm-code-text: #e4e4e4;
 
-    /* Shadows */
-    --dm-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-    --dm-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    /* Shadows - 0.5 opacity */
+    --dm-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --dm-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
     --dm-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
 
-    /* Status colors */
-    --dm-success: #22C55E;
-    --dm-success-bg: rgba(34, 197, 94, 0.15);
-    --dm-success-text: #86EFAC;
-    --dm-success-border: rgba(34, 197, 94, 0.3);
+    /* Status colors - Terminal-inspired with 0.1 opacity backgrounds */
+    --dm-success: #4ade80;
+    --dm-success-bg: rgba(74, 222, 128, 0.1);
+    --dm-success-text: #4ade80;
+    --dm-success-border: rgba(74, 222, 128, 0.3);
 
-    --dm-warning: #F59E0B;
-    --dm-warning-bg: rgba(245, 158, 11, 0.15);
-    --dm-warning-text: #FCD34D;
-    --dm-warning-border: rgba(245, 158, 11, 0.3);
+    --dm-warning: #fbbf24;
+    --dm-warning-bg: rgba(251, 191, 36, 0.1);
+    --dm-warning-text: #fbbf24;
+    --dm-warning-border: rgba(251, 191, 36, 0.3);
 
-    --dm-error: #EF4444;
-    --dm-error-bg: rgba(239, 68, 68, 0.15);
-    --dm-error-text: #FCA5A5;
-    --dm-error-border: rgba(239, 68, 68, 0.3);
+    --dm-error: #f87171;
+    --dm-error-bg: rgba(248, 113, 113, 0.1);
+    --dm-error-text: #f87171;
+    --dm-error-border: rgba(248, 113, 113, 0.3);
 
-    --dm-info: #3B82F6;
-    --dm-info-bg: rgba(59, 130, 246, 0.15);
-    --dm-info-text: #93C5FD;
-    --dm-info-border: rgba(59, 130, 246, 0.3);
+    --dm-info: #60a5fa;
+    --dm-info-bg: rgba(96, 165, 250, 0.1);
+    --dm-info-text: #60a5fa;
+    --dm-info-border: rgba(96, 165, 250, 0.3);
 
     /* Accent */
     --dm-accent: #F97316;
@@ -265,6 +267,56 @@ html.dark,
 
 .dm-card:hover {
   border-color: var(--dm-accent);
+}
+
+/* Flat card component - no shadow, minimal styling */
+.dm-card-flat {
+  background-color: var(--dm-surface);
+  border: 1px solid var(--dm-border);
+}
+
+.dm-card-flat:hover {
+  background-color: var(--dm-surface-hover);
+}
+
+/* Row component - horizontal list item styling */
+.dm-row {
+  background-color: var(--dm-surface);
+  border-bottom: 1px solid var(--dm-border-light);
+}
+
+.dm-row:hover {
+  background-color: var(--dm-hover-bg);
+}
+
+.dm-row:last-child {
+  border-bottom: none;
+}
+
+/* Container component - wrapper with surface background */
+.dm-container {
+  background-color: var(--dm-surface);
+  border: 1px solid var(--dm-border);
+}
+
+/* List item component - for use in lists/menus */
+.dm-list-item {
+  background-color: transparent;
+  border-bottom: 1px solid var(--dm-border-light);
+  color: var(--dm-text);
+}
+
+.dm-list-item:hover {
+  background-color: var(--dm-hover-bg);
+}
+
+.dm-list-item:last-child {
+  border-bottom: none;
+}
+
+.dm-list-item.active {
+  background-color: var(--dm-surface-alt);
+  border-left: 2px solid var(--dm-accent);
 }
 
 /* Input component */
@@ -478,6 +530,10 @@ html.dark ::-webkit-scrollbar-thumb:hover,
    ============================================ */
 body,
 .dm-card,
+.dm-card-flat,
+.dm-row,
+.dm-container,
+.dm-list-item,
 .dm-sidebar,
 .dm-input,
 .dm-btn-primary,
