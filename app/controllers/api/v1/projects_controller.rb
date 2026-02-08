@@ -6,34 +6,52 @@ module Api
       before_action :authenticate_master_key!
 
       # POST /api/v1/projects/provision
-      # Creates a new project or returns existing one
+      # Creates a new project or returns existing one, linked to Platform
       def provision
-        project = Project.find_or_create_by!(name: params[:name]) do |p|
-          p.environment = params[:environment] || "development"
-          p.slug = params[:name].to_s.parameterize
-          # Generate a platform_project_id for auto-provisioned projects
-          p.platform_project_id = "flx_#{SecureRandom.hex(8)}"
+        platform_project_id = params[:platform_project_id]
+        name = params[:name].to_s.strip
+
+        # If platform_project_id provided, use it as the primary key
+        if platform_project_id.present?
+          project = Project.find_or_initialize_by(platform_project_id: platform_project_id)
+          project.name = name if name.present?
+          project.slug = name.parameterize if name.present? && project.slug.blank?
+          project.environment = params[:environment] if params[:environment].present?
+          project.save!
+        elsif name.present?
+          # Fallback for standalone mode (no Platform integration)
+          project = Project.find_or_create_by!(name: name) do |p|
+            p.environment = params[:environment] || "development"
+            p.slug = name.parameterize
+            p.platform_project_id = "flx_#{SecureRandom.hex(8)}"
+          end
+        else
+          return render json: { error: "Either platform_project_id or name is required" }, status: :bad_request
         end
 
         render json: {
           id: project.id,
+          platform_project_id: project.platform_project_id,
           name: project.name,
           slug: project.slug,
+          environment: project.environment,
           ingest_key: project.ingest_key,
           api_key: project.api_key
         }
       end
 
       # GET /api/v1/projects/lookup
-      # Looks up a project by name or slug
+      # Looks up a project by name, slug, or platform_project_id
       def lookup
-        project = Project.find_by(name: params[:name]) || Project.find_by(slug: params[:name])
+        project = find_project
 
         if project
           render json: {
             id: project.id,
+            platform_project_id: project.platform_project_id,
             name: project.name,
             slug: project.slug,
+            environment: project.environment,
             ingest_key: project.ingest_key,
             api_key: project.api_key
           }
@@ -43,6 +61,14 @@ module Api
       end
 
       private
+
+      def find_project
+        if params[:platform_project_id].present?
+          Project.find_by(platform_project_id: params[:platform_project_id])
+        else
+          Project.find_by(name: params[:name]) || Project.find_by(slug: params[:name])
+        end
+      end
 
       def authenticate_master_key!
         key = request.headers["X-Master-Key"]
