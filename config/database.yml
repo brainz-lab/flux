@@ -19,19 +19,57 @@ default: &default
   url: <%= ENV["DATABASE_URL"] %>
 
 development:
-  <<: *default
-  database: flux_development
-  host: <%= ENV.fetch("DATABASE_HOST", "localhost") %>
-  port: <%= ENV.fetch("DATABASE_PORT", "5432") %>
-  username: <%= ENV.fetch("DATABASE_USERNAME", "postgres") %>
-  password: <%= ENV.fetch("DATABASE_PASSWORD", "postgres") %>
+  primary:
+    <<: *default
+    database: flux_development
+    host: <%= ENV.fetch("DATABASE_HOST", "localhost") %>
+    port: <%= ENV.fetch("DATABASE_PORT", "5432") %>
+    username: <%= ENV.fetch("DATABASE_USERNAME", "postgres") %>
+    password: <%= ENV.fetch("DATABASE_PASSWORD", "postgres") %>
+  queue:
+    <<: *default
+    database: flux_development
+    host: <%= ENV.fetch("DATABASE_HOST", "localhost") %>
+    port: <%= ENV.fetch("DATABASE_PORT", "5432") %>
+    username: <%= ENV.fetch("DATABASE_USERNAME", "postgres") %>
+    password: <%= ENV.fetch("DATABASE_PASSWORD", "postgres") %>
+    migrations_paths: db/queue_migrate
+  cache:
+    <<: *default
+    database: flux_development
+    host: <%= ENV.fetch("DATABASE_HOST", "localhost") %>
+    port: <%= ENV.fetch("DATABASE_PORT", "5432") %>
+    username: <%= ENV.fetch("DATABASE_USERNAME", "postgres") %>
+    password: <%= ENV.fetch("DATABASE_PASSWORD", "postgres") %>
+    migrations_paths: db/cache_migrate
+  cable:
+    <<: *default
+    database: flux_development
+    host: <%= ENV.fetch("DATABASE_HOST", "localhost") %>
+    port: <%= ENV.fetch("DATABASE_PORT", "5432") %>
+    username: <%= ENV.fetch("DATABASE_USERNAME", "postgres") %>
+    password: <%= ENV.fetch("DATABASE_PASSWORD", "postgres") %>
+    migrations_paths: db/cable_migrate
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
-  database: flux_test
+  primary:
+    <<: *default
+    database: flux_test
+  queue:
+    <<: *default
+    database: flux_test
+    migrations_paths: db/queue_migrate
+  cache:
+    <<: *default
+    database: flux_test
+    migrations_paths: db/cache_migrate
+  cable:
+    <<: *default
+    database: flux_test
+    migrations_paths: db/cable_migrate
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
