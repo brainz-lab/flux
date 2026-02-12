@@ -1,34 +1,15 @@
-# Flux recurring jobs
+# examples:
+#   periodic_cleanup:
+#     class: CleanSoftDeletedRecordsJob
+#     queue: background
+#     args: [ 1000, { batch_size: 500 } ]
+#     schedule: every hour
+#   periodic_cleanup_with_command:
+#     command: "SoftDeletedRecord.due.delete_all"
+#     priority: 2
+#     schedule: at 5am every day
 
 production:
-  # Clean up finished Solid Queue jobs
   clear_solid_queue_finished_jobs:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
     schedule: every hour at minute 12
-
-  # Aggregate metrics every hour
-  aggregate_metrics_1h:
-    class: MetricAggregationJob
-    args: [null, { bucket_size: "1h" }]
-    schedule: every hour at minute 5
-
-  # Run anomaly detection every 15 minutes
-  detect_anomalies:
-    class: AnomalyDetectionJob
-    schedule: every 15 minutes
-
-  # Cleanup old data daily
-  cleanup_old_data:
-    class: CleanupOldDataJob
-    schedule: at 3am every day
-
-development:
-  # Less frequent in development
-  aggregate_metrics_1h:
-    class: MetricAggregationJob
-    args: [null, { bucket_size: "1h" }]
-    schedule: every hour
-
-  detect_anomalies:
-    class: AnomalyDetectionJob
-    schedule: every hour
