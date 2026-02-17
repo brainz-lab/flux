@@ -38,13 +38,15 @@ class SsoController < ApplicationController
 
     request = Net::HTTP::Post.new(uri.path)
     request["Content-Type"] = "application/json"
-    request.body = { token: token }.to_json
+    request["X-Service-Key"] = ENV["SERVICE_KEY"]
+    request.body = { token: token, product: "flux" }.to_json
 
     response = http.request(request)
 
     if response.is_a?(Net::HTTPSuccess)
       JSON.parse(response.body)
     else
+      Rails.logger.error("[SSO] Token validation failed: #{response.code} #{response.body}")
       nil
     end
   rescue => e

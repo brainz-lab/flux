@@ -9,7 +9,15 @@ module Dashboard
     layout "dashboard"
 
     def index
-      @projects = Project.order(created_at: :desc)
+      if Rails.env.development?
+        @projects = Project.order(created_at: :desc)
+      elsif session[:platform_project_id]
+        @projects = Project.where(platform_project_id: session[:platform_project_id])
+                           .or(Project.where(archived_at: nil))
+                           .order(created_at: :desc)
+      else
+        @projects = Project.none
+      end
     end
 
     def show
@@ -71,7 +79,7 @@ module Dashboard
       return unless Rails.env.production?
 
       platform_url = ENV.fetch("BRAINZLAB_PLATFORM_EXTERNAL_URL", "https://platform.brainzlab.ai")
-      redirect_to dashboard_projects_path, alert: "Projects are managed in Platform. Visit #{platform_url} to create new projects."
+      redirect_to platform_url, allow_other_host: true
     end
   end
 end
