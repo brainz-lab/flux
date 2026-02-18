@@ -29,5 +29,8 @@ module Flux
 
     # Use SQL schema format for better TimescaleDB compatibility
     config.active_record.schema_format = :sql
+
+    # TimescaleDB internal tables break Rails 8.1 schema dumper
+    config.active_record.dump_schema_after_migration = false
   end
 end

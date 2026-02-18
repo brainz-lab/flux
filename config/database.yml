@@ -15,40 +15,23 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
-  url: <%= ENV["DATABASE_URL"] %>
+  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
   primary:
     <<: *default
-    database: flux_development
-    host: <%= ENV.fetch("DATABASE_HOST", "localhost") %>
-    port: <%= ENV.fetch("DATABASE_PORT", "5432") %>
-    username: <%= ENV.fetch("DATABASE_USERNAME", "postgres") %>
-    password: <%= ENV.fetch("DATABASE_PASSWORD", "postgres") %>
+    url: <%= ENV.fetch("DATABASE_URL", "postgres://postgres:postgres@localhost:5432") %>/flux_development
   queue:
     <<: *default
-    database: flux_development
-    host: <%= ENV.fetch("DATABASE_HOST", "localhost") %>
-    port: <%= ENV.fetch("DATABASE_PORT", "5432") %>
-    username: <%= ENV.fetch("DATABASE_USERNAME", "postgres") %>
-    password: <%= ENV.fetch("DATABASE_PASSWORD", "postgres") %>
+    url: <%= ENV.fetch("DATABASE_URL", "postgres://postgres:postgres@localhost:5432") %>/flux_development_queue
     migrations_paths: db/queue_migrate
   cache:
     <<: *default
-    database: flux_development
-    host: <%= ENV.fetch("DATABASE_HOST", "localhost") %>
-    port: <%= ENV.fetch("DATABASE_PORT", "5432") %>
-    username: <%= ENV.fetch("DATABASE_USERNAME", "postgres") %>
-    password: <%= ENV.fetch("DATABASE_PASSWORD", "postgres") %>
+    url: <%= ENV.fetch("DATABASE_URL", "postgres://postgres:postgres@localhost:5432") %>/flux_development_cache
     migrations_paths: db/cache_migrate
   cable:
     <<: *default
-    database: flux_development
-    host: <%= ENV.fetch("DATABASE_HOST", "localhost") %>
-    port: <%= ENV.fetch("DATABASE_PORT", "5432") %>
-    username: <%= ENV.fetch("DATABASE_USERNAME", "postgres") %>
-    password: <%= ENV.fetch("DATABASE_PASSWORD", "postgres") %>
+    url: <%= ENV.fetch("DATABASE_URL", "postgres://postgres:postgres@localhost:5432") %>/flux_development_cable
     migrations_paths: db/cable_migrate
 
 # Warning: The database defined as "test" will be erased and
@@ -57,18 +40,18 @@ development:
 test:
   primary:
     <<: *default
-    database: flux_test
+    url: <%= ENV.fetch("DATABASE_URL", "postgres://postgres:postgres@localhost:5432") %>/flux_test
   queue:
     <<: *default
-    database: flux_test
+    url: <%= ENV.fetch("DATABASE_URL", "postgres://postgres:postgres@localhost:5432") %>/flux_test_queue
     migrations_paths: db/queue_migrate
   cache:
     <<: *default
-    database: flux_test
+    url: <%= ENV.fetch("DATABASE_URL", "postgres://postgres:postgres@localhost:5432") %>/flux_test_cache
     migrations_paths: db/cache_migrate
   cable:
     <<: *default
-    database: flux_test
+    url: <%= ENV.fetch("DATABASE_URL", "postgres://postgres:postgres@localhost:5432") %>/flux_test_cable
     migrations_paths: db/cable_migrate
 
 # As with config/credentials.yml, you never want to store sensitive information,
