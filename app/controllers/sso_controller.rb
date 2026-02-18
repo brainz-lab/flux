@@ -1,29 +1,45 @@
 # frozen_string_literal: true
 
 class SsoController < ApplicationController
+  # GET /sso/callback - Callback from Platform SSO
   def callback
     token = params[:token]
-    return redirect_to root_path, alert: "Missing token" unless token
 
-    # Validate token with Platform
-    project_data = validate_sso_token(token)
+    if token.blank?
+      redirect_to platform_external_url, allow_other_host: true
+      return
+    end
 
-    if project_data
-      session[:platform_project_id] = project_data["project_id"]
-      session[:platform_user_id] = project_data["user_id"]
+    # Validate token with Platform (internal Docker network)
+    user_info = validate_sso_token(token)
+
+    if user_info[:valid]
+      session[:platform_user_id] = user_info[:user_id]
+      session[:platform_project_id] = user_info[:project_id]
+      session[:platform_organization_id] = user_info[:organization_id]
+      session[:project_slug] = user_info[:project_slug]
+      session[:user_email] = user_info[:user_email]
+      session[:user_name] = user_info[:user_name]
 
       # Sync all user's projects from Platform
       sync_projects_from_platform(token)
 
-      redirect_to params[:return_to] || dashboard_root_path, allow_other_host: true
+      # Ensure at least the current project exists (fallback if full sync failed)
+      ensure_project_exists(user_info)
+
+      redirect_to params[:return_to] || dashboard_root_path
     else
-      redirect_to root_path, alert: "Invalid SSO token"
+      redirect_to "#{platform_external_url}/login?error=sso_failed", allow_other_host: true
     end
   end
 
   def logout
     session.delete(:platform_project_id)
     session.delete(:platform_user_id)
+    session.delete(:platform_organization_id)
+    session.delete(:project_slug)
+    session.delete(:user_email)
+    session.delete(:user_name)
 
     redirect_to root_path, notice: "Logged out successfully"
   end
@@ -31,8 +47,7 @@ class SsoController < ApplicationController
   private
 
   def validate_sso_token(token)
-    uri = URI.parse("#{platform_url}/api/v1/sso/validate")
-
+    uri = URI("#{platform_internal_url}/api/v1/sso/validate")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = uri.scheme == "https"
 
@@ -43,15 +58,15 @@ class SsoController < ApplicationController
 
     response = http.request(request)
 
-    if response.is_a?(Net::HTTPSuccess)
-      JSON.parse(response.body)
+    if response.code == "200"
+      JSON.parse(response.body, symbolize_names: true).merge(valid: true)
     else
       Rails.logger.error("[SSO] Token validation failed: #{response.code} #{response.body}")
-      nil
+      { valid: false }
     end
   rescue => e
     Rails.logger.error("[SSO] Token validation failed: #{e.message}")
-    nil
+    { valid: false }
   end
 
   def sync_projects_from_platform(sso_token)
@@ -79,8 +94,24 @@ class SsoController < ApplicationController
     Rails.logger.error("[SSO] Project sync failed: #{e.message}")
   end
 
+  # Fallback: ensure at least the current project exists from SSO validation data
+  def ensure_project_exists(user_info)
+    return unless user_info[:project_id].present?
+
+    project = Project.find_or_initialize_by(platform_project_id: user_info[:project_id].to_s)
+    return if project.persisted?
+
+    project.name = user_info[:project_slug] || "Project #{user_info[:project_id]}"
+    project.slug = user_info[:project_slug]
+    project.environment = "production"
+    project.save!
+    Rails.logger.info("[SSO] Created project from SSO validation: #{project.name}")
+  rescue => e
+    Rails.logger.error("[SSO] ensure_project_exists failed: #{e.message}")
+  end
+
   def fetch_user_projects(sso_token)
-    uri = URI("#{platform_url}/api/v1/user/projects")
+    uri = URI("#{platform_internal_url}/api/v1/user/projects")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = uri.scheme == "https"
     http.open_timeout = 5
@@ -102,7 +133,13 @@ class SsoController < ApplicationController
     nil
   end
 
-  def platform_url
-    ENV.fetch("BRAINZLAB_PLATFORM_URL", "http://platform:3000")
+  # Internal URL for service-to-service API calls (Docker network)
+  def platform_internal_url
+    ENV["BRAINZLAB_PLATFORM_URL"] || "http://platform:3000"
+  end
+
+  # External URL for browser redirects (Traefik)
+  def platform_external_url
+    ENV["BRAINZLAB_PLATFORM_EXTERNAL_URL"] || "http://platform.localhost"
   end
 end

@@ -60,7 +60,7 @@ module Dashboard
       return if Rails.env.development?
 
       unless session[:platform_project_id]
-        platform_url = ENV.fetch("BRAINZLAB_PLATFORM_URL", "http://platform:3000")
+        platform_url = ENV.fetch("BRAINZLAB_PLATFORM_EXTERNAL_URL", "https://platform.brainzlab.ai")
         redirect_to "#{platform_url}/auth/sso?product=flux&return_to=#{request.url}", allow_other_host: true
       end
     end
