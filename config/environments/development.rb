@@ -78,4 +78,9 @@ Rails.application.configure do
 
   # Allow Traefik reverse proxy routing (*.brainzlab.local)
   config.hosts << ".brainzlab.local"
+
+  # SolidQueue uses a separate queue database (flux_development_queue).
+  # Without this, `solid_queue:start` connects to the primary DB which
+  # doesn't have solid_queue_* tables.
+  config.solid_queue.connects_to = { database: { writing: :queue } }
 end
