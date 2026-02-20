@@ -3,11 +3,11 @@
 <div class="space-y-8">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-[22px] font-semibold tracking-tight flux-text">Projects</h1>
-      <p class="mt-1 text-[13px] flux-text-muted">Manage your Flux projects</p>
+      <h1 class="text-[22px] font-semibold tracking-tight dm-text">Projects</h1>
+      <p class="mt-1 text-[13px] dm-text-muted">Manage your Flux projects</p>
     </div>
     <% unless Rails.env.production? %>
-      <a href="<%= new_dashboard_project_path %>" class="inline-flex items-center gap-2 px-4 py-2 text-[13px] font-medium rounded-lg transition-colors flux-btn-primary">
+      <a href="<%= new_dashboard_project_path %>" class="inline-flex items-center gap-2 px-4 py-2 text-[13px] font-medium rounded-lg transition-colors dm-btn-primary">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
         </svg>
@@ -19,19 +19,19 @@
   <% if @projects.any? %>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <% @projects.each do |project| %>
-        <a href="<%= dashboard_project_overview_path(project) %>" class="block px-5 py-4 rounded-xl transition-colors flux-card hover:flux-border-hover">
+        <a href="<%= dashboard_project_overview_path(project) %>" class="block px-5 py-4 rounded-xl transition-colors dm-card hover:dm-border">
           <div class="flex items-start justify-between">
             <div class="space-y-1">
-              <h3 class="text-[15px] font-medium flux-text"><%= project.name || "Unnamed Project" %></h3>
-              <p class="text-[13px] flux-text-muted">
+              <h3 class="text-[15px] font-medium dm-text"><%= project.name || "Unnamed Project" %></h3>
+              <p class="text-[13px] dm-text-muted">
                 <%= project.environment %> · <%= project.events_count %> events
               </p>
             </div>
-            <span class="px-2 py-0.5 text-[11px] font-medium rounded-full flux-badge">
+            <span class="px-2 py-0.5 text-[11px] font-medium rounded-full dm-badge">
               <%= project.environment %>
             </span>
           </div>
-          <div class="mt-3 flex items-center gap-4 text-[12px] flux-text-muted">
+          <div class="mt-3 flex items-center gap-4 text-[12px] dm-text-muted">
             <span><%= project.metric_definitions.count %> metrics</span>
             <span><%= project.flux_dashboards.count %> dashboards</span>
             <span>Created <%= time_ago_in_words(project.created_at) %> ago</span>
@@ -40,20 +40,20 @@
       <% end %>
     </div>
   <% else %>
-    <div class="text-center py-16 rounded-xl flux-card">
+    <div class="text-center py-16 rounded-xl dm-card">
       <div class="space-y-3">
-        <svg class="mx-auto w-12 h-12 flux-text-disabled" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="mx-auto w-12 h-12 dm-text-placeholder" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
         </svg>
-        <p class="text-[15px] flux-text-secondary">No projects yet</p>
+        <p class="text-[15px] dm-text-secondary">No projects yet</p>
         <% if Rails.env.production? %>
-          <p class="text-[13px] flux-text-muted">Create a project in Platform to get started</p>
-          <a href="<%= ENV.fetch('BRAINZLAB_PLATFORM_EXTERNAL_URL', 'https://platform.brainzlab.ai') %>" target="_blank" class="inline-flex items-center gap-2 mt-4 px-4 py-2 text-[13px] font-medium rounded-lg transition-colors flux-btn-primary">
+          <p class="text-[13px] dm-text-muted">Create a project in Platform to get started</p>
+          <a href="<%= ENV.fetch('BRAINZLAB_PLATFORM_EXTERNAL_URL', 'https://platform.brainzlab.ai') %>" target="_blank" class="inline-flex items-center gap-2 mt-4 px-4 py-2 text-[13px] font-medium rounded-lg transition-colors dm-btn-primary">
             Go to Platform
           </a>
         <% else %>
-          <p class="text-[13px] flux-text-muted">Create your first project to start tracking events and metrics</p>
-          <a href="<%= new_dashboard_project_path %>" class="inline-flex items-center gap-2 mt-4 px-4 py-2 text-[13px] font-medium rounded-lg transition-colors flux-btn-primary">
+          <p class="text-[13px] dm-text-muted">Create your first project to start tracking events and metrics</p>
+          <a href="<%= new_dashboard_project_path %>" class="inline-flex items-center gap-2 mt-4 px-4 py-2 text-[13px] font-medium rounded-lg transition-colors dm-btn-primary">
             Create your first project
           </a>
         <% end %>

@@ -3,10 +3,10 @@
 <div class="space-y-8">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-[22px] font-semibold tracking-tight flux-text">Dashboards</h1>
-      <p class="mt-1 text-[13px] flux-text-muted">Custom dashboards and widgets</p>
+      <h1 class="text-[22px] font-semibold tracking-tight dm-text">Dashboards</h1>
+      <p class="mt-1 text-[13px] dm-text-muted">Custom dashboards and widgets</p>
     </div>
-    <a href="<%= new_dashboard_project_dashboard_path(@project) %>" class="inline-flex items-center gap-2 px-4 py-2 text-[13px] font-medium rounded-lg transition-colors flux-btn-primary">
+    <a href="<%= new_dashboard_project_dashboard_path(@project) %>" class="inline-flex items-center gap-2 px-4 py-2 text-[13px] font-medium rounded-lg transition-colors dm-btn-primary">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
       </svg>
@@ -17,28 +17,28 @@
   <% if @dashboards.any? %>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <% @dashboards.each do |dashboard| %>
-        <a href="<%= dashboard_project_dashboard_path(@project, dashboard) %>" class="block px-5 py-4 rounded-xl transition-colors flux-card hover:flux-border-hover">
+        <a href="<%= dashboard_project_dashboard_path(@project, dashboard) %>" class="block px-5 py-4 rounded-xl transition-colors dm-card hover:dm-border">
           <div class="flex items-start justify-between">
             <div class="space-y-1">
-              <h3 class="text-[15px] font-medium flux-text"><%= dashboard.name %></h3>
-              <p class="text-[13px] flux-text-muted">
+              <h3 class="text-[15px] font-medium dm-text"><%= dashboard.name %></h3>
+              <p class="text-[13px] dm-text-muted">
                 <%= dashboard.description.presence || "No description" %>
               </p>
             </div>
             <div class="flex items-center gap-2">
               <% if dashboard.is_default %>
-                <span class="px-2 py-0.5 text-[11px] font-medium rounded-full flux-badge-success">
+                <span class="px-2 py-0.5 text-[11px] font-medium rounded-full dm-badge-success">
                   Default
                 </span>
               <% end %>
               <% if dashboard.is_public %>
-                <span class="px-2 py-0.5 text-[11px] font-medium rounded-full flux-badge-info">
+                <span class="px-2 py-0.5 text-[11px] font-medium rounded-full dm-badge-info">
                   Public
                 </span>
               <% end %>
             </div>
           </div>
-          <div class="mt-3 flex items-center gap-4 text-[12px] flux-text-muted">
+          <div class="mt-3 flex items-center gap-4 text-[12px] dm-text-muted">
             <span><%= dashboard.widgets.count %> widgets</span>
             <span>Updated <%= time_ago_in_words(dashboard.updated_at) %> ago</span>
           </div>
@@ -46,14 +46,14 @@
       <% end %>
     </div>
   <% else %>
-    <div class="text-center py-16 rounded-xl flux-card">
+    <div class="text-center py-16 rounded-xl dm-card">
       <div class="space-y-3">
-        <svg class="mx-auto w-12 h-12 flux-text-disabled" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="mx-auto w-12 h-12 dm-text-placeholder" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>
         </svg>
-        <p class="text-[15px] flux-text-secondary">No dashboards yet</p>
-        <p class="text-[13px] flux-text-muted">Create a dashboard to visualize your metrics</p>
-        <a href="<%= new_dashboard_project_dashboard_path(@project) %>" class="inline-flex items-center gap-2 mt-4 px-4 py-2 text-[13px] font-medium rounded-lg transition-colors flux-btn-primary">
+        <p class="text-[15px] dm-text-secondary">No dashboards yet</p>
+        <p class="text-[13px] dm-text-muted">Create a dashboard to visualize your metrics</p>
+        <a href="<%= new_dashboard_project_dashboard_path(@project) %>" class="inline-flex items-center gap-2 mt-4 px-4 py-2 text-[13px] font-medium rounded-lg transition-colors dm-btn-primary">
           Create your first dashboard
         </a>
       </div>

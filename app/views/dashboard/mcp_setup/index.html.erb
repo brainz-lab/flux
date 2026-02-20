@@ -2,15 +2,15 @@
 
 <div class="space-y-8">
   <div>
-    <h1 class="text-[22px] font-semibold tracking-tight flux-text">MCP Integration</h1>
-    <p class="mt-1 text-[13px] flux-text-muted">Connect Flux to Claude Desktop or Cursor</p>
+    <h1 class="text-[22px] font-semibold tracking-tight dm-text">MCP Integration</h1>
+    <p class="mt-1 text-[13px] dm-text-muted">Connect Flux to Claude Desktop or Cursor</p>
   </div>
 
   <div class="space-y-6">
-    <div class="px-6 py-5 rounded-xl flux-card">
-      <h2 class="text-[15px] font-medium mb-4 flux-text">Claude Desktop Configuration</h2>
-      <p class="text-[13px] mb-3 flux-text-secondary">Add this to your <code class="px-1.5 py-0.5 rounded flux-bg-subtle flux-text">claude_desktop_config.json</code>:</p>
-      <pre class="p-4 rounded-lg text-[13px] overflow-x-auto flux-code"><code>{
+    <div class="px-6 py-5 rounded-xl dm-card">
+      <h2 class="text-[15px] font-medium mb-4 dm-text">Claude Desktop Configuration</h2>
+      <p class="text-[13px] mb-3 dm-text-secondary">Add this to your <code class="px-1.5 py-0.5 rounded dm-surface-alt dm-text">claude_desktop_config.json</code>:</p>
+      <pre class="p-4 rounded-lg text-[13px] overflow-x-auto dm-code"><code>{
   "mcpServers": {
     "flux": {
       "command": "curl",
@@ -25,36 +25,36 @@
 }</code></pre>
     </div>
 
-    <div class="px-6 py-5 rounded-xl flux-card">
-      <h2 class="text-[15px] font-medium mb-4 flux-text">Available Tools</h2>
+    <div class="px-6 py-5 rounded-xl dm-card">
+      <h2 class="text-[15px] font-medium mb-4 dm-text">Available Tools</h2>
       <div class="space-y-3">
         <% @tools.each do |tool| %>
-          <div class="flex items-start gap-3 p-3 rounded-lg flux-bg-muted">
-            <code class="text-[13px] font-medium px-2 py-0.5 rounded flux-bg-subtle flux-text"><%= tool[:name] %></code>
-            <span class="text-[13px] flux-text-secondary"><%= tool[:description] %></span>
+          <div class="flex items-start gap-3 p-3 rounded-lg dm-surface-alt">
+            <code class="text-[13px] font-medium px-2 py-0.5 rounded dm-surface-alt dm-text"><%= tool[:name] %></code>
+            <span class="text-[13px] dm-text-secondary"><%= tool[:description] %></span>
           </div>
         <% end %>
       </div>
     </div>
 
-    <div class="px-6 py-5 rounded-xl flux-card">
-      <h2 class="text-[15px] font-medium mb-4 flux-text">Example Usage</h2>
-      <p class="text-[13px] mb-3 flux-text-secondary">Once connected, you can ask Claude questions like:</p>
-      <ul class="space-y-2 text-[13px] flux-text-secondary">
+    <div class="px-6 py-5 rounded-xl dm-card">
+      <h2 class="text-[15px] font-medium mb-4 dm-text">Example Usage</h2>
+      <p class="text-[13px] mb-3 dm-text-secondary">Once connected, you can ask Claude questions like:</p>
+      <ul class="space-y-2 text-[13px] dm-text-secondary">
         <li class="flex items-start gap-2">
-          <span class="flux-text-disabled">*</span>
+          <span class="dm-text-placeholder">*</span>
           "Show me all signup events from today"
         </li>
         <li class="flex items-start gap-2">
-          <span class="flux-text-disabled">*</span>
+          <span class="dm-text-placeholder">*</span>
           "What's the current value of api.requests metric?"
         </li>
         <li class="flex items-start gap-2">
-          <span class="flux-text-disabled">*</span>
+          <span class="dm-text-placeholder">*</span>
           "Are there any anomalies detected?"
         </li>
         <li class="flex items-start gap-2">
-          <span class="flux-text-disabled">*</span>
+          <span class="dm-text-placeholder">*</span>
           "Track a user signup event for user 123"
         </li>
       </ul>
