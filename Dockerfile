@@ -11,16 +11,13 @@ RUN apt-get update -qq && \
     ln -s /usr/lib/$(uname -m)-linux-gnu/libjemalloc.so.2 /usr/local/lib/libjemalloc.so && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
+# NOTE: BUNDLE_DEPLOYMENT intentionally NOT set here (set in final stage only)
 ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development" \
     LD_PRELOAD="/usr/local/lib/libjemalloc.so"
 
 FROM base AS build
-
-ARG BUNDLE_GITHUB__COM
-ENV BUNDLE_GITHUB__COM=${BUNDLE_GITHUB__COM}
 
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config && \
@@ -28,20 +25,29 @@ RUN apt-get update -qq && \
 
 COPY Gemfile Gemfile.lock ./
 
-# Install gems - frozen=false allows resolution, DEPLOYMENT=1 ensures gem (not path) sources
-RUN bundle config set frozen false && \
+RUN --mount=type=secret,id=bundle_github \
+    export BUNDLE_RUBYGEMS__PKG__GITHUB__COM=$(cat /run/secrets/bundle_github) && \
+    bundle lock && \
+    cp Gemfile.lock /tmp/Gemfile.lock.resolved && \
     bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
 COPY . .
 
-RUN ln -s "$(bundle show brainzlab-ui)" /brainzlab-ui || true
+# Restore resolved Gemfile.lock
+RUN cp /tmp/Gemfile.lock.resolved Gemfile.lock
 
-RUN bundle exec bootsnap precompile app/ lib/
+# Fix brainzlab_ui symlink for Tailwind CSS imports
+RUN ln -sf "$(bundle show fluyenta-ui)/app/assets/stylesheets/brainzlab_ui" app/assets/tailwind/brainzlab_ui
+
+# Create root symlink for fluyenta-ui assets
+RUN ln -s "$(bundle show fluyenta-ui)" /fluyenta-ui-gem
+
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 FROM base
+
+ENV BUNDLE_DEPLOYMENT="1"
 
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash
