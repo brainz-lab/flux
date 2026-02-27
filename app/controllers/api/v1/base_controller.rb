@@ -13,7 +13,15 @@ module Api
         key = extract_api_key
         return render_unauthorized("Missing API key") unless key.present?
 
+        # Try local keys first (flx_api_*, flx_ingest_*)
         @current_project = find_project_by_key(key)
+        return if @current_project
+
+        # Fall back to Platform validation for sk_live_/sk_test_ keys
+        if key.start_with?("sk_live_", "sk_test_")
+          @current_project = validate_with_platform(key)
+        end
+
         render_unauthorized("Invalid API key") unless @current_project
       end
 
@@ -35,6 +43,16 @@ module Api
 
       def render_unauthorized(message = "Unauthorized")
         render json: { error: message }, status: :unauthorized
+      end
+
+      def validate_with_platform(key)
+        result = PlatformClient.validate_key(key)
+        return nil unless result.valid?
+
+        PlatformClient.find_or_create_project(result, key)
+      rescue StandardError => e
+        Rails.logger.error "[BaseController] Platform validation error: #{e.message}"
+        nil
       end
 
       def render_not_found(message = "Not found")
