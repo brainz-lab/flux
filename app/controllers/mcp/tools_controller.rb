@@ -43,7 +43,23 @@ module Mcp
       return render json: { error: "Missing API key" }, status: :unauthorized unless key.present?
 
       @project = Project.find_by(api_key: key) || Project.find_by(ingest_key: key)
+      return if @project
+
+      if key.start_with?("sk_live_", "sk_test_")
+        @project = validate_with_platform(key)
+      end
+
       render json: { error: "Invalid API key" }, status: :unauthorized unless @project
+    end
+
+    def validate_with_platform(key)
+      result = PlatformClient.validate_key(key)
+      return nil unless result.valid?
+
+      PlatformClient.find_or_create_project(result, key)
+    rescue StandardError => e
+      Rails.logger.error "[McpToolsController] Platform validation error: #{e.message}"
+      nil
     end
 
     def extract_api_key
