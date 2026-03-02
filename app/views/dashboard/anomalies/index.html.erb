@@ -3,12 +3,12 @@
 <div class="space-y-8">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-[22px] font-semibold tracking-tight flux-text">Anomalies</h1>
-      <p class="mt-1 text-[13px] flux-text-muted">AI-detected patterns and outliers</p>
+      <h1 class="text-[22px] font-semibold tracking-tight dm-text">Anomalies</h1>
+      <p class="mt-1 text-[13px] dm-text-muted">AI-detected patterns and outliers</p>
     </div>
     <div class="flex items-center gap-3">
       <% if @anomalies.any? %>
-        <span class="text-[13px] flux-text-muted">
+        <span class="text-[13px] dm-text-muted">
           <%= @anomalies.where(acknowledged: false).count %> unacknowledged
         </span>
       <% end %>
@@ -18,15 +18,15 @@
   <% if @anomalies.any? %>
     <div class="space-y-3">
       <% @anomalies.each do |anomaly| %>
-        <div class="px-5 py-4 rounded-xl flux-card">
+        <div class="px-5 py-4 rounded-xl dm-card">
           <div class="flex items-start justify-between">
             <div class="flex items-start gap-3">
-              <div class="mt-0.5 w-2 h-2 rounded-full" style="background: var(--flux-<%= anomaly.severity == 'critical' ? 'error' : anomaly.severity == 'warning' ? 'warning' : 'info' %>);"></div>
+              <div class="mt-0.5 w-2 h-2 rounded-full" style="background: var(--dm-<%= anomaly.severity == 'critical' ? 'error' : anomaly.severity == 'warning' ? 'warning' : 'info' %>);"></div>
               <div class="space-y-1">
-                <h3 class="text-[15px] font-medium flux-text">
+                <h3 class="text-[15px] font-medium dm-text">
                   <%= anomaly.anomaly_type.titleize %> in <%= anomaly.source_name %>
                 </h3>
-                <p class="text-[13px] flux-text-muted">
+                <p class="text-[13px] dm-text-muted">
                   <% if anomaly.expected_value && anomaly.actual_value %>
                     Expected <%= number_with_precision(anomaly.expected_value, precision: 2) %>,
                     got <%= number_with_precision(anomaly.actual_value, precision: 2) %>
@@ -37,21 +37,21 @@
                     Anomaly detected in <%= anomaly.source %>
                   <% end %>
                 </p>
-                <p class="text-[12px] flux-text-faint">
+                <p class="text-[12px] dm-text-muted">
                   Detected <%= time_ago_in_words(anomaly.detected_at) %> ago
                 </p>
               </div>
             </div>
             <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 text-[11px] font-medium rounded-full capitalize flux-badge-<%= anomaly.severity == 'critical' ? 'error' : anomaly.severity == 'warning' ? 'warning' : 'info' %>">
+              <span class="px-2 py-0.5 text-[11px] font-medium rounded-full capitalize dm-badge-<%= anomaly.severity == 'critical' ? 'error' : anomaly.severity == 'warning' ? 'warning' : 'info' %>">
                 <%= anomaly.severity %>
               </span>
               <% if anomaly.acknowledged %>
-                <span class="px-2 py-0.5 text-[11px] font-medium rounded-full flux-badge">
+                <span class="px-2 py-0.5 text-[11px] font-medium rounded-full dm-badge">
                   Acknowledged
                 </span>
               <% else %>
-                <%= button_to acknowledge_dashboard_project_anomaly_path(@project, anomaly), method: :post, class: "px-2 py-0.5 text-[11px] font-medium rounded-full transition-colors flux-btn-secondary hover:flux-border" do %>
+                <%= button_to acknowledge_dashboard_project_anomaly_path(@project, anomaly), method: :post, class: "px-2 py-0.5 text-[11px] font-medium rounded-full transition-colors dm-btn-secondary hover:dm-border" do %>
                   Acknowledge
                 <% end %>
               <% end %>
@@ -61,13 +61,13 @@
       <% end %>
     </div>
   <% else %>
-    <div class="text-center py-16 rounded-xl flux-card">
+    <div class="text-center py-16 rounded-xl dm-card">
       <div class="space-y-3">
-        <svg class="mx-auto w-12 h-12 flux-text-disabled" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="mx-auto w-12 h-12 dm-text-placeholder" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
-        <p class="text-[15px] flux-text-secondary">No anomalies detected</p>
-        <p class="text-[13px] flux-text-muted">Flux will automatically detect unusual patterns in your metrics</p>
+        <p class="text-[15px] dm-text-secondary">No anomalies detected</p>
+        <p class="text-[13px] dm-text-muted">Flux will automatically detect unusual patterns in your metrics</p>
       </div>
     </div>
   <% end %>

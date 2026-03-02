@@ -3,33 +3,33 @@
 <div class="space-y-8">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-[22px] font-semibold tracking-tight flux-text">Events</h1>
-      <p class="mt-1 text-[13px] flux-text-muted">View and filter tracked events</p>
+      <h1 class="text-[22px] font-semibold tracking-tight dm-text">Events</h1>
+      <p class="mt-1 text-[13px] dm-text-muted">View and filter tracked events</p>
     </div>
   </div>
 
   <div class="grid grid-cols-1 gap-6 lg:grid-cols-4">
     <!-- Sidebar with event counts -->
     <div class="lg:col-span-1">
-      <div class="rounded-xl flux-card">
-        <div class="px-5 py-4 border-b flux-border">
-          <h3 class="text-[13px] font-semibold uppercase tracking-wide flux-text-muted">Event Types</h3>
+      <div class="rounded-xl dm-card">
+        <div class="px-5 py-4 border-b dm-border">
+          <h3 class="text-[13px] font-semibold uppercase tracking-wide dm-text-muted">Event Types</h3>
         </div>
-        <ul role="list" class="divide-y flux-border">
+        <ul role="list" class="divide-y dm-border">
           <% @event_counts.each do |name, count| %>
             <li>
               <% active = params[:name] == name %>
               <a href="<%= dashboard_project_events_path(@project, name: name) %>"
-                 class="block px-5 py-3 transition-colors <%= active ? 'flux-bg-subtle' : '' %>">
+                 class="block px-5 py-3 transition-colors <%= active ? 'dm-surface-alt' : '' %>">
                 <div class="flex items-center justify-between">
-                  <p class="truncate text-[14px] font-medium <%= active ? 'flux-text-accent' : 'flux-text' %>"><%= name %></p>
-                  <span class="text-[13px] tabular-nums flux-text-muted"><%= number_with_delimiter(count) %></span>
+                  <p class="truncate text-[14px] font-medium <%= active ? 'dm-accent-text' : 'dm-text' %>"><%= name %></p>
+                  <span class="text-[13px] tabular-nums dm-text-muted"><%= number_with_delimiter(count) %></span>
                 </div>
               </a>
             </li>
           <% end %>
           <% if @event_counts.empty? %>
-            <li class="px-5 py-4 text-[13px] flux-text-muted">No events tracked yet</li>
+            <li class="px-5 py-4 text-[13px] dm-text-muted">No events tracked yet</li>
           <% end %>
         </ul>
       </div>
@@ -37,44 +37,44 @@
 
     <!-- Event list -->
     <div class="lg:col-span-3">
-      <div class="rounded-xl overflow-hidden flux-card">
+      <div class="rounded-xl overflow-hidden dm-card">
         <table class="min-w-full">
-          <thead class="flux-table-header">
+          <thead class="dm-table-header">
             <tr>
-              <th scope="col" class="py-3.5 pl-5 pr-3 text-left text-[12px] font-semibold uppercase tracking-wide flux-text-muted">Name</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-[12px] font-semibold uppercase tracking-wide flux-text-muted">Timestamp</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-[12px] font-semibold uppercase tracking-wide flux-text-muted">User</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-[12px] font-semibold uppercase tracking-wide flux-text-muted">Value</th>
+              <th scope="col" class="py-3.5 pl-5 pr-3 text-left text-[12px] font-semibold uppercase tracking-wide dm-text-muted">Name</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-[12px] font-semibold uppercase tracking-wide dm-text-muted">Timestamp</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-[12px] font-semibold uppercase tracking-wide dm-text-muted">User</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-[12px] font-semibold uppercase tracking-wide dm-text-muted">Value</th>
               <th scope="col" class="relative py-3.5 pl-3 pr-5">
                 <span class="sr-only">View</span>
               </th>
             </tr>
           </thead>
-          <tbody class="divide-y flux-border">
+          <tbody class="divide-y dm-border">
             <% @events.each do |event| %>
-              <tr class="flux-table-row transition-colors">
-                <td class="whitespace-nowrap py-4 pl-5 pr-3 text-[14px] font-medium flux-text-accent">
+              <tr class="dm-table-row transition-colors">
+                <td class="whitespace-nowrap py-4 pl-5 pr-3 text-[14px] font-medium dm-accent-text">
                   <%= event.name %>
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-[13px] tabular-nums flux-text-secondary">
+                <td class="whitespace-nowrap px-3 py-4 text-[13px] tabular-nums dm-text-secondary">
                   <%= event.timestamp.strftime("%Y-%m-%d %H:%M:%S") %>
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-[13px] flux-text-secondary">
+                <td class="whitespace-nowrap px-3 py-4 text-[13px] dm-text-secondary">
                   <%= event.user_id || "-" %>
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-[13px] tabular-nums flux-text-secondary">
+                <td class="whitespace-nowrap px-3 py-4 text-[13px] tabular-nums dm-text-secondary">
                   <%= event.value || "-" %>
                 </td>
                 <td class="relative whitespace-nowrap py-4 pl-3 pr-5 text-right text-[13px] font-medium">
-                  <%= link_to "View", dashboard_project_event_path(@project, event), class: "flux-text-accent hover:underline" %>
+                  <%= link_to "View", dashboard_project_event_path(@project, event), class: "dm-accent-text hover:underline" %>
                 </td>
               </tr>
             <% end %>
             <% if @events.empty? %>
               <tr>
-                <td colspan="5" class="py-12 text-center text-[14px] flux-text-muted">
+                <td colspan="5" class="py-12 text-center text-[14px] dm-text-muted">
                   <div class="space-y-2">
-                    <svg class="mx-auto w-10 h-10 flux-text-disabled" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="mx-auto w-10 h-10 dm-text-placeholder" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                     </svg>
                     <p>No events found</p>

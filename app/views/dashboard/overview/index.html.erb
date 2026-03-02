@@ -4,34 +4,34 @@
   <!-- Header -->
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-[22px] font-semibold tracking-tight flux-text">Overview</h1>
-      <p class="mt-1 text-[13px] flux-text-muted">Last 24 hours</p>
+      <h1 class="text-[22px] font-semibold tracking-tight dm-text">Overview</h1>
+      <p class="mt-1 text-[13px] dm-text-muted">Last 24 hours</p>
     </div>
   </div>
 
   <!-- Stats Grid -->
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-    <div class="px-5 py-4 rounded-xl flux-card">
-      <p class="text-[12px] font-medium uppercase tracking-wide flux-text-muted">Events</p>
-      <p class="mt-1 text-[28px] font-semibold tabular-nums flux-text">
+    <div class="px-5 py-4 rounded-xl dm-card">
+      <p class="text-[12px] font-medium uppercase tracking-wide dm-text-muted">Events</p>
+      <p class="mt-1 text-[28px] font-semibold tabular-nums dm-text">
         <%= number_with_delimiter(@stats[:events_total]) %>
       </p>
     </div>
-    <div class="px-5 py-4 rounded-xl flux-card">
-      <p class="text-[12px] font-medium uppercase tracking-wide flux-text-muted">Metrics</p>
-      <p class="mt-1 text-[28px] font-semibold tabular-nums flux-text">
+    <div class="px-5 py-4 rounded-xl dm-card">
+      <p class="text-[12px] font-medium uppercase tracking-wide dm-text-muted">Metrics</p>
+      <p class="mt-1 text-[28px] font-semibold tabular-nums dm-text">
         <%= number_with_delimiter(@stats[:metrics_total]) %>
       </p>
     </div>
-    <div class="px-5 py-4 rounded-xl flux-card">
-      <p class="text-[12px] font-medium uppercase tracking-wide flux-text-muted">Anomalies</p>
-      <p class="mt-1 text-[28px] font-semibold tabular-nums flux-text-accent">
+    <div class="px-5 py-4 rounded-xl dm-card">
+      <p class="text-[12px] font-medium uppercase tracking-wide dm-text-muted">Anomalies</p>
+      <p class="mt-1 text-[28px] font-semibold tabular-nums dm-accent-text">
         <%= number_with_delimiter(@stats[:anomalies_count]) %>
       </p>
     </div>
-    <div class="px-5 py-4 rounded-xl flux-card">
-      <p class="text-[12px] font-medium uppercase tracking-wide flux-text-muted">Dashboards</p>
-      <p class="mt-1 text-[28px] font-semibold tabular-nums flux-text">
+    <div class="px-5 py-4 rounded-xl dm-card">
+      <p class="text-[12px] font-medium uppercase tracking-wide dm-text-muted">Dashboards</p>
+      <p class="mt-1 text-[28px] font-semibold tabular-nums dm-text">
         <%= number_with_delimiter(@stats[:dashboards_count]) %>
       </p>
     </div>
@@ -39,47 +39,47 @@
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Top Events -->
-    <div class="rounded-xl flux-card">
-      <div class="px-5 py-4 border-b flux-border">
-        <h2 class="text-[15px] font-medium flux-text">Top Events</h2>
-        <p class="mt-0.5 text-[12px] flux-text-muted">Most tracked events</p>
+    <div class="rounded-xl dm-card">
+      <div class="px-5 py-4 border-b dm-border">
+        <h2 class="text-[15px] font-medium dm-text">Top Events</h2>
+        <p class="mt-0.5 text-[12px] dm-text-muted">Most tracked events</p>
       </div>
-      <div class="divide-y flux-border">
+      <div class="divide-y dm-border">
         <% @recent_events.each do |name, count| %>
           <div class="px-5 py-3 flex items-center justify-between">
-            <span class="text-[14px] font-medium flux-text-accent"><%= name %></span>
-            <span class="text-[13px] tabular-nums flux-text-secondary"><%= number_with_delimiter(count) %></span>
+            <span class="text-[14px] font-medium dm-accent-text"><%= name %></span>
+            <span class="text-[13px] tabular-nums dm-text-secondary"><%= number_with_delimiter(count) %></span>
           </div>
         <% end %>
         <% if @recent_events.empty? %>
           <div class="px-5 py-8 text-center">
-            <p class="text-[14px] flux-text-muted">No events tracked yet</p>
+            <p class="text-[14px] dm-text-muted">No events tracked yet</p>
           </div>
         <% end %>
       </div>
     </div>
 
     <!-- Recent Anomalies -->
-    <div class="rounded-xl flux-card">
-      <div class="px-5 py-4 border-b flux-border">
-        <h2 class="text-[15px] font-medium flux-text">Recent Anomalies</h2>
-        <p class="mt-0.5 text-[12px] flux-text-muted">Latest detected anomalies</p>
+    <div class="rounded-xl dm-card">
+      <div class="px-5 py-4 border-b dm-border">
+        <h2 class="text-[15px] font-medium dm-text">Recent Anomalies</h2>
+        <p class="mt-0.5 text-[12px] dm-text-muted">Latest detected anomalies</p>
       </div>
-      <div class="divide-y flux-border">
+      <div class="divide-y dm-border">
         <% @recent_anomalies.each do |anomaly| %>
           <div class="px-5 py-3">
             <div class="flex items-center justify-between">
               <div class="min-w-0 flex-1">
-                <p class="text-[14px] font-medium truncate flux-text"><%= anomaly.source_name %></p>
-                <p class="text-[12px] flux-text-muted">
+                <p class="text-[14px] font-medium truncate dm-text"><%= anomaly.source_name %></p>
+                <p class="text-[12px] dm-text-muted">
                   <%= anomaly.anomaly_type.capitalize %> · <%= anomaly.deviation_description %>
                 </p>
               </div>
               <span class="ml-3 px-2 py-0.5 text-[11px] font-medium rounded-full
                 <%= case anomaly.severity
-                    when 'critical' then 'flux-badge-error'
-                    when 'warning' then 'flux-badge-warning'
-                    else 'flux-badge-info'
+                    when 'critical' then 'dm-badge-error'
+                    when 'warning' then 'dm-badge-warning'
+                    else 'dm-badge-info'
                     end %>">
                 <%= anomaly.severity %>
               </span>
@@ -88,7 +88,7 @@
         <% end %>
         <% if @recent_anomalies.empty? %>
           <div class="px-5 py-8 text-center">
-            <p class="text-[14px] flux-text-muted">No anomalies detected</p>
+            <p class="text-[14px] dm-text-muted">No anomalies detected</p>
           </div>
         <% end %>
       </div>
@@ -96,25 +96,25 @@
   </div>
 
   <!-- Quick Start -->
-  <div class="rounded-xl flux-card">
-    <div class="px-5 py-4 border-b flux-border">
-      <h2 class="text-[15px] font-medium flux-text">Quick Start</h2>
+  <div class="rounded-xl dm-card">
+    <div class="px-5 py-4 border-b dm-border">
+      <h2 class="text-[15px] font-medium dm-text">Quick Start</h2>
     </div>
     <div class="px-5 py-4">
-      <p class="text-[14px] flux-text-secondary">Track events and metrics using the SDK:</p>
-      <pre class="mt-3 p-4 rounded-lg text-[13px] leading-relaxed overflow-x-auto flux-code"><code><span class="flux-code-comment"># Track an event</span>
-BrainzLab::Flux.track(<span class="flux-text-accent">"user.signup"</span>, {
+      <p class="text-[14px] dm-text-secondary">Track events and metrics using the SDK:</p>
+      <pre class="mt-3 p-4 rounded-lg text-[13px] leading-relaxed overflow-x-auto dm-code"><code><span class="dm-code-comment"># Track an event</span>
+BrainzLab::Flux.track(<span class="dm-accent-text">"user.signup"</span>, {
   user_id: user.id,
-  plan: <span class="flux-text-accent">"pro"</span>
+  plan: <span class="dm-accent-text">"pro"</span>
 })
 
-<span class="flux-code-comment"># Track metrics</span>
-BrainzLab::Flux.gauge(<span class="flux-text-accent">"users.online"</span>, 234)
-BrainzLab::Flux.increment(<span class="flux-text-accent">"api.requests"</span>)
-BrainzLab::Flux.distribution(<span class="flux-text-accent">"response_time"</span>, 145.2)
+<span class="dm-code-comment"># Track metrics</span>
+BrainzLab::Flux.gauge(<span class="dm-accent-text">"users.online"</span>, 234)
+BrainzLab::Flux.increment(<span class="dm-accent-text">"api.requests"</span>)
+BrainzLab::Flux.distribution(<span class="dm-accent-text">"response_time"</span>, 145.2)
 
-<span class="flux-code-comment"># Time a block</span>
-BrainzLab::Flux.measure(<span class="flux-text-accent">"pdf.generate"</span>) do
+<span class="dm-code-comment"># Time a block</span>
+BrainzLab::Flux.measure(<span class="dm-accent-text">"pdf.generate"</span>) do
   generate_pdf(document)
 end</code></pre>
     </div>
