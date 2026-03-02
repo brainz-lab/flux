@@ -157,7 +157,7 @@ RSpec.describe AnomalyDetector, type: :service do
         create(:metric_point,
           project: project,
           metric_name: "test.metric",
-          value: [100, 110, 95, 105, 100, 108, 97][i],
+          value: [ 100, 110, 95, 105, 100, 108, 97 ][i],
           timestamp: (7 - i).days.ago.beginning_of_day + 12.hours
         )
       end

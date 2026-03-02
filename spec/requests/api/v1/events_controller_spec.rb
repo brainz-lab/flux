@@ -98,7 +98,7 @@ RSpec.describe "Api::V1::EventsController", type: :request do
     end
 
     it "increments project events_count" do
-      events = [{ name: "event1" }, { name: "event2" }]
+      events = [ { name: "event1" }, { name: "event2" } ]
       initial_count = project.reload.events_count || 0
 
       post "/api/v1/events/batch", params: { events: events }, headers: headers

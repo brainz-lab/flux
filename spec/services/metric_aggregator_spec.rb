@@ -32,7 +32,7 @@ RSpec.describe MetricAggregator, type: :service do
 
     it "calculates statistics correctly" do
       bucket_time = 1.hour.ago.beginning_of_hour
-      values = [10, 20, 30, 40, 50]
+      values = [ 10, 20, 30, 40, 50 ]
 
       values.each do |value|
         create(:metric_point,
@@ -197,7 +197,7 @@ RSpec.describe MetricAggregator, type: :service do
 
   describe "percentile calculation" do
     it "calculates percentiles correctly" do
-      sorted = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      sorted = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
 
       p50 = aggregator.send(:percentile, sorted, 0.5)
       expect(p50).to be_within(0.1).of(5.5)
