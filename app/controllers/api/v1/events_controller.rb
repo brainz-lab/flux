@@ -11,6 +11,7 @@ module Api
           # Queue anomaly detection asynchronously
           AnomalyDetectionJob.perform_later(event.id) if should_detect_anomalies?
 
+          track_usage!(1, metric: "events")
           render_created(id: event.id, name: event.name)
         else
           render_bad_request(event.errors.full_messages.join(", "))
@@ -43,6 +44,7 @@ module Api
         bulk_insert_events(records)
         current_project.increment_events_count!(records.size)
 
+        track_usage!(records.size, metric: "events")
         render_created(ingested: records.size)
       end
 
