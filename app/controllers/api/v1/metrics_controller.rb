@@ -18,6 +18,7 @@ module Api
         end
 
         current_project.increment_metrics_count!
+        track_usage!(1, metric: "metrics")
         render_created(success: true, metric: params[:name], type: params[:type])
       end
 
@@ -39,6 +40,7 @@ module Api
         bulk_insert_metric_points(records)
         current_project.increment_metrics_count!(records.size)
 
+        track_usage!(records.size, metric: "metrics")
         render_created(ingested: records.size)
       end
 

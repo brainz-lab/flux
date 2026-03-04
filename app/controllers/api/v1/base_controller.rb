@@ -71,6 +71,17 @@ module Api
         render json: data, status: :ok
       end
 
+      def track_usage!(count = 1, metric: "events")
+        return unless current_project&.platform_project_id
+
+        PlatformClient.track_usage(
+          project_id: current_project.platform_project_id,
+          product: "flux",
+          metric: metric,
+          count: count
+        )
+      end
+
       def parse_time_range(value)
         case value
         when /^(\d+)m$/ then $1.to_i.minutes.ago

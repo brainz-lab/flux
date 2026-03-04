@@ -52,6 +52,9 @@ module Api
           current_project.increment_metrics_count!(metrics_ingested)
         end
 
+        track_usage!(events_ingested, metric: "events") if events_ingested > 0
+        track_usage!(metrics_ingested, metric: "metrics") if metrics_ingested > 0
+
         render_created(
           events_ingested: events_ingested,
           metrics_ingested: metrics_ingested,
