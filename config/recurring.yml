@@ -13,3 +13,12 @@ production:
   clear_solid_queue_finished_jobs:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
     schedule: every hour at minute 12
+  anomaly_detection:
+    class: AnomalyDetectionJob
+    schedule: every 15 minutes
+  cleanup_old_data:
+    class: CleanupOldDataJob
+    schedule: at 2am every day
+  metric_aggregation:
+    class: MetricAggregationJob
+    schedule: every hour at minute 45
