@@ -70,6 +70,9 @@ else
 end
 gem "phlex-rails", "~> 2.0"
 
+# AI Assistant
+gem "anthropic", "~> 0.4"
+
 group :development, :test do
   gem "simplecov", require: false
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

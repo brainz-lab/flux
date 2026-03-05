@@ -79,6 +79,13 @@ Rails.application.routes.draw do
       get "mcp", to: "mcp_setup#index"
       get "dev_tools", to: "dev_tools#index"
     end
+
+    # AI Assistant
+    resources :assistant, only: [:index, :show, :create] do
+      member do
+        post :message
+      end
+    end
   end
 
   # SSO callback
