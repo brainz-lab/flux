@@ -70,6 +70,13 @@ else
 end
 gem "phlex-rails", "~> 2.0"
 
+# BrainzLab Platform Client - Transaction reporting to Platform
+if File.exist?(File.expand_path("../brainzlab-platform-client", __dir__))
+  gem "brainzlab-platform-client", path: "../brainzlab-platform-client"
+else
+  gem "brainzlab-platform-client", "0.1.1", source: "https://rubygems.pkg.github.com/fluyenta"
+end
+
 # AI Assistant
 gem "anthropic", "~> 0.4"
 
